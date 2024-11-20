@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Pages\Documents;
 
 use App\Livewire\Forms\DocumentFrom;
 use App\Models\Contract;
@@ -186,6 +186,6 @@ class DocumentIndex extends Component
 
     public function render()
     {
-        return view('livewire.document-index');
+        return view('livewire.pages.documents.document-index');
     }
 }

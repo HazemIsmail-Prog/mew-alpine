@@ -7,11 +7,11 @@
 
         @canany(['updateSteps', 'viewSteps', 'deleteSteps'], App\Models\Document::class)
             <template x-for="step in steps" :key="step.id">
-                @include('components.steps.row')
+                @include('livewire.pages.documents.modal.steps.row')
             </template>
         @endcanany
 
-        @include('components.steps.form')
+        @include('livewire.pages.documents.modal.steps.form')
 
     </div>
 

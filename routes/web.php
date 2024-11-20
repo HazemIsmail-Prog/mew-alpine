@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\StepController;
-use App\Livewire\ContractIndex;
-use App\Livewire\DocumentIndex;
-use App\Livewire\StakeholderIndex;
-use App\Livewire\UserIndex;
+use App\Livewire\Pages\Contracts\ContractIndex;
+use App\Livewire\Pages\Documents\DocumentIndex;
+use App\Livewire\Pages\Stakeholders\StakeholderIndex;
+use App\Livewire\Pages\Users\UserIndex;
 use App\Models\Contract;
 use App\Models\Document;
 use App\Models\Stakeholder;

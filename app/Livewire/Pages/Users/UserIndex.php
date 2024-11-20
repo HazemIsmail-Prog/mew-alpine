@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Pages\Users;
 
 use App\Livewire\Forms\UserFrom;
 use App\Models\Contract;
@@ -71,6 +71,6 @@ class UserIndex extends Component
     #[Layout('layouts.app')]
     public function render()
     {
-        return view('livewire.user-index');
+        return view('livewire.pages.users.user-index');
     }
 }

@@ -9,13 +9,13 @@
             <template x-if="attachments.length">
                 <div>
                     <template x-for="attachment in attachments" :key="attachment.id">
-                        @include('components.attachments.row')
+                        @include('livewire.pages.documents.modal.attachments.row')
                     </template>
                 </div>
             </template>
         @endcanany
 
-        @include('components.attachments.form')
+        @include('livewire.pages.documents.modal.attachments.form')
 
     </div>
 

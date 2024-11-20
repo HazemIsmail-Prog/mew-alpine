@@ -39,15 +39,15 @@
                 </div>
             @endcan
 
-            @include('components.documents.filters')
+            @include('livewire.pages.documents.filters')
             <div class="p-2 text-gray-900 flex flex-col gap-2">
                 @foreach ($this->documents as $document)
-                    @include('components.documents.row')
+                    @include('livewire.pages.documents.row')
                 @endforeach
             </div>
         </div>
     </div>
-    @include('components.documents.container')
+    @include('livewire.pages.documents.modal.container')
 
 </div>
 

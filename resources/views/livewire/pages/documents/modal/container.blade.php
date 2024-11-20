@@ -7,11 +7,11 @@
 
     <div class=" overflow-y-auto no-scrollbar flex-1 flex flex-col gap-3">
 
-        @include('components.steps.container')
+        @include('livewire.pages.documents.modal.steps.container')
 
-        @include('components.attachments.container')
+        @include('livewire.pages.documents.modal.attachments.container')
 
-        @include('components.documents.form')
+        @include('livewire.pages.documents.modal.form')
 
     </div>
 

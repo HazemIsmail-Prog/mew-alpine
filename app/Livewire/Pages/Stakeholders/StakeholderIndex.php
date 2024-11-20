@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Pages\Stakeholders;
 
 use App\Livewire\Forms\StakeholderFrom;
 use App\Models\Stakeholder;
@@ -42,6 +42,6 @@ class StakeholderIndex extends Component
     #[Layout('layouts.app')]
     public function render()
     {
-        return view('livewire.stakeholder-index');
+        return view('livewire.pages.stakeholders.stakeholder-index');
     }
 }
