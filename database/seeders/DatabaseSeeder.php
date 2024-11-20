@@ -14,10 +14,33 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
+        $this->call([
+            ContractSeeder::class,
+            StakeholderSeeder::class,
+            // DocumentSeeder::class,
+            // StepSeeder::class,
+            // AttachmentSeeder::class,
+            TagSeeder::class,
+        ]);
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'حازم',
+            'username' => 'hazem',
+            'stakeholder_id' => 1,
+            'type' => 'superAdmin',
         ]);
+        User::factory()->create([
+            'name' => 'Mahmoud',
+            'username' => 'mahmoud',
+            'stakeholder_id' => 1,
+            'type' => 'admin',
+        ]);
+        User::factory()->create([
+            'name' => 'User',
+            'username' => 'user',
+            'stakeholder_id' => 1,
+            'type' => 'user',
+        ]);
+        
     }
 }
