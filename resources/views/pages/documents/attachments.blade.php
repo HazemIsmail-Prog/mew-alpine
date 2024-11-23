@@ -17,7 +17,7 @@
                                 @can('viewAttachments', App\Models\Document::class)
                                     <template x-if="!attachment.isEditing">
                                         <a class="text-sm text-gray-900 dark:text-gray-300 whitespace-pre-line"
-                                            x-html="attachment.description" target="__blank" x-bind:href="attachment.file"></a>
+                                            x-html="attachment.description" target="__blank" x-bind:href="attachment.file_path"></a>
 
                                     </template>
                                 @endcan
@@ -219,7 +219,7 @@
 
                 axios.post(`documents/${this.attachmentForm.document_id}/attachments`, formData)
                     .then((response) => {
-                        this.attachments.push(response.data);
+                        this.attachments.push(response.data);                       
                         this.resetAttachmentFromExceptDocumentId();
                     })
                     .catch((error) => {

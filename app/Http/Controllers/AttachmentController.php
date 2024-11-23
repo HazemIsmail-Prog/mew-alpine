@@ -5,18 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Attachment;
 use App\Models\Document;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Validation\ValidationException;
 
 
 class AttachmentController extends Controller
 {
-
     public function index(Document $document)
     {
-        $attachments = $document->attachments()->latest()->get();
+        $attachments = $document->attachments()->get();
         return response()->json($attachments);
     }
-
 
     public function store(Request $request, Document $document)
     {
@@ -27,7 +27,12 @@ class AttachmentController extends Controller
         ]);
 
         if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('attachments', 'public');
+            $path = $request->file('file')->storePublicly('Attachments/' . $document->id, 's3');
+
+            // Ensure the file exists in S3
+            if (!Storage::disk('s3')->exists($path)) {
+                return response()->json(['error' => 'File not found on S3'], 404);
+            }
 
             $attachment = Attachment::create([
                 'file' => $path,
@@ -35,7 +40,7 @@ class AttachmentController extends Controller
                 'document_id' => $validated['document_id'],
             ]);
 
-            return response()->json(['attachment' => $attachment], 201);
+            return response()->json($attachment, 201);
         }
 
         return response()->json(['error' => 'File upload failed'], 500);
@@ -50,7 +55,7 @@ class AttachmentController extends Controller
         return response()->json($attachment);
     }
 
-    public function destroy(Document $document,Attachment $attachment)
+    public function destroy(Document $document, Attachment $attachment)
     {
         $attachment->delete();
         return response()->json(['message' => 'Attachment deleted successfully']);
