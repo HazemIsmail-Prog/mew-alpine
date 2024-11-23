@@ -4,78 +4,153 @@ namespace App\Http\Controllers;
 
 use App\Models\Document;
 use App\Models\Step;
+use Illuminate\Console\View\Components\Task;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class StepController extends Controller
 {
-    public function getSteps(Document $document)
+    public function index(Document $document)
     {
-        // Fetch steps related to the document
-        $steps = $document->steps()->orderBy('created_at')->get();
-
+        $steps = $document->steps()->orderBy('order', 'asc')
+            ->get();
         return response()->json($steps);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Document $document)
     {
-        // Validate request data
+        $position = $document->steps()->max('order') + 1;
         $validatedData = $request->validate([
-            'document_id' => 'required|integer',
             'action' => 'required|string',
         ]);
-
-        // Create the step
-        $validatedData['user_id'] = Auth::id();
-        $validatedData['is_completed'] = false;
-        $step = Step::create($validatedData);
-
-        // Return the saved step as a JSON response
+        $step = $document->steps()->create($validatedData);
+        $step->order = $position;
+        $step->save();
         return response()->json($step);
     }
 
-    public function toggleCompleted(Request $request, Step $step)
+    public function update(Request $request, Document $document, Step $step)
     {
-        // Validate the request
+        $request->validate([
+            'action' => 'required|string',
+        ]);
+        $step->update($request->only('action'));
+        return response()->json($step);
+    }
+
+    public function destroy(Document $document, Step $step)
+    {
+        // Delete the specified step
+        $step->delete();
+
+        // Update the order for all steps that come after the deleted step
+        Step::where('document_id', $document->id)
+            ->where('order', '>', $step->order)
+            ->decrement('order');
+
+        return response()->json(['message' => 'Step deleted and reordered successfully']);
+    }
+
+    public function toggleCompleted(Request $request, Document $document, Step $step)
+    {
         $validatedData = $request->validate([
             'is_completed' => 'required|boolean',
         ]);
-
-        // Update the step
         $step->update($validatedData);
-
-        // Return the updated step as JSON
         return response()->json($step);
     }
 
-    public function update(Request $request, Step $step)
-    {
-        // Validate the incoming data
-        $validatedData = $request->validate([
-            'action' => 'nullable|string',  // action can be null if only updating is_completed
-            'is_completed' => 'nullable|boolean',  // is_completed can be null if only updating action
-        ]);
+    // public function reorderSteps(Request $request, Document $document)
+    // {
+    //     $step = Step::find($request->id);
+    //     $currentPosition = $step->order;
+    //     $newPosition = $request->newPosition + 1;
 
-        // Update only the fields that are present in the request
-        if (isset($validatedData['action'])) {
-            $step->action = $validatedData['action'];
+    //     if ($currentPosition === $newPosition) return;
+
+    //     $step->update(['order' => -1]);
+
+    //     $stepsWhichNeedsToBeShifted = Step::query()
+    //         ->where('document_id', $step->document_id)
+    //         ->whereBetween('order', [
+    //             min($currentPosition, $newPosition),
+    //             max($currentPosition, $newPosition)
+    //         ]);
+
+    //     if ($currentPosition < $newPosition) {
+    //         $stepsWhichNeedsToBeShifted->decrement('order');
+    //     } else {
+    //         $stepsWhichNeedsToBeShifted->increment('order');
+    //     }
+
+    //     $step->update(['order' => $newPosition + 1]);
+
+    //     return response()->json(['message' => 'Steps reordered successfully'], 200);
+    // }
+    // public function reorderSteps(Request $request, Document $document)
+    // {
+    //     $step = Step::findOrFail($request->id);
+    //     $currentPosition = $step->order;
+    //     $newPosition = $request->newPosition + 1;
+
+    //     if ($currentPosition === $newPosition) {
+    //         return response()->json(['message' => 'No reordering necessary'], 200);
+    //     }
+
+    //     // Temporarily set the order to -1 to avoid conflicts
+    //     $step->update(['order' => -1]);
+
+    //     // Determine the direction of movement and update other steps accordingly
+    //     if ($currentPosition < $newPosition) {
+    //         Step::where('document_id', $step->document_id)
+    //             ->whereBetween('order', [$currentPosition, $newPosition - 1])
+    //             ->decrement('order');
+    //     } else {
+    //         Step::where('document_id', $step->document_id)
+    //             ->whereBetween('order', [$newPosition, $currentPosition])
+    //             ->increment('order');
+    //     }
+
+    //     // Update the moved step to its new position
+    //     $step->update(['order' => $newPosition]);
+
+    //     return response()->json(['message' => 'Steps reordered successfully'], 200);
+    // }
+    public function reorderSteps(Request $request, Document $document)
+    {
+        $step = Step::findOrFail($request->id);
+        $currentPosition = $step->order;
+        $newPosition = $request->newPosition + 1;
+
+        if ($currentPosition === $newPosition) {
+            return response()->json(['message' => 'No reordering necessary'], 200);
         }
 
-        if (isset($validatedData['is_completed'])) {
-            $step->is_completed = $validatedData['is_completed'];
+        // Temporarily set the order to -1 to avoid conflicts
+        $step->update(['order' => -1]);
+
+        // Determine the direction of movement and update other steps accordingly
+        if ($currentPosition < $newPosition) {
+            Step::where('document_id', $step->document_id)
+                ->whereBetween('order', [$currentPosition, $newPosition])
+                ->decrement('order');
+        } else {
+            Step::where('document_id', $step->document_id)
+                ->whereBetween('order', [$newPosition, $currentPosition])
+                ->increment('order');
         }
 
-        // Save the updated step
-        $step->save();
+        // Update the moved step to its new position
+        $step->update(['order' => $newPosition]);
 
-        // Return the updated step as JSON
-        return response()->json($step);
-    }
+        // Reorder all steps to ensure they start from 1 and have no gaps or duplications
+        $steps = Step::where('document_id', $document->id)
+            ->orderBy('order')
+            ->get();
 
-    public function destroy(Step $step)
-    {
-        $step->delete();
+        foreach ($steps as $index => $step) {
+            $step->update(['order' => $index + 1]);
+        }
 
-        return response()->json(['message' => 'Step deleted successfully']);
+        return response()->json(['message' => 'Steps reordered successfully'], 200);
     }
 }

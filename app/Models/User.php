@@ -43,7 +43,15 @@ class User extends Authenticatable
         ];
     }
 
+    
+    
     public function contracts() : BelongsToMany {
         return $this->belongsToMany(Contract::class);
+    }
+    
+    protected $appends = ['contract_ids'];
+    public function getContractIdsAttribute()
+    {
+        return $this->load('contracts')->contracts->pluck('id');
     }
 }

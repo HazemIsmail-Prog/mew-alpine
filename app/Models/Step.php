@@ -11,7 +11,6 @@ class Step extends Model
 
     protected static function booted(): void
     {
-
         static::creating(function ($model) {
             $model->user_id = Auth::id();
         });

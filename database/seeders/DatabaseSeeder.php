@@ -27,19 +27,19 @@ class DatabaseSeeder extends Seeder
             'name' => 'حازم',
             'username' => 'hazem',
             'stakeholder_id' => 1,
-            'type' => 'superAdmin',
+            'role' => 'superAdmin',
         ]);
         User::factory()->create([
             'name' => 'Mahmoud',
             'username' => 'mahmoud',
             'stakeholder_id' => 1,
-            'type' => 'admin',
+            'role' => 'admin',
         ]);
         User::factory()->create([
             'name' => 'User',
             'username' => 'user',
             'stakeholder_id' => 1,
-            'type' => 'user',
+            'role' => 'user',
         ]);
         
     }

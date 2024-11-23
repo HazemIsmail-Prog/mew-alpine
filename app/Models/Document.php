@@ -60,4 +60,16 @@ class Document extends Model
     {
         return $this->hasMany(Attachment::class);
     }
+
+    protected $appends = ['follow_ids','tag_ids'];
+
+    public function getFollowIdsAttribute()
+    {
+        return $this->users->pluck('id');
+    }
+    
+    public function getTagIdsAttribute()
+    {
+        return $this->tags->pluck('id');
+    }
 }

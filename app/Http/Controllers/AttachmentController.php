@@ -11,61 +11,48 @@ use Illuminate\Validation\ValidationException;
 class AttachmentController extends Controller
 {
 
-    public function getAttachments(Document $document)
+    public function index(Document $document)
     {
-        // Fetch attachments related to the document
-        $attachments = $document->attachments()->orderBy('created_at')->get();
-
+        $attachments = $document->attachments()->latest()->get();
         return response()->json($attachments);
     }
 
 
-    public function store(Request $request)
+    public function store(Request $request, Document $document)
     {
-        try {
-            // Validate the request
-            $validated = $request->validate([
-                'file' => 'required|file|mimes:jpg,png,pdf',
-                'description' => 'required|string|max:255',
-                'document_id' => 'required|integer|exists:documents,id',
+        $validated = $request->validate([
+            'file' => 'required|file|mimes:jpg,png,pdf',
+            'description' => 'required|string|max:255',
+            'document_id' => 'required|integer|exists:documents,id',
+        ]);
+
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('attachments', 'public');
+
+            $attachment = Attachment::create([
+                'file' => $path,
+                'description' => $validated['description'],
+                'document_id' => $validated['document_id'],
             ]);
 
-            // Store the file
-            if ($request->hasFile('file')) {
-                $path = $request->file('file')->store('attachments', 'public');
-
-                $attachment = Attachment::create([
-                    'file' => $path,
-                    'description' => $validated['description'],
-                    'document_id' => $validated['document_id'],
-                ]);
-
-                return response()->json(['attachment' => $attachment], 201);
-            }
-
-            return response()->json(['error' => 'File upload failed'], 500);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Validation Error',
-                'errors' => $e->errors(),
-            ], 422);
+            return response()->json(['attachment' => $attachment], 201);
         }
+
+        return response()->json(['error' => 'File upload failed'], 500);
     }
 
-    public function update(Request $request, Attachment $attachment)
+    public function update(Request $request, Document $document, Attachment $attachment)
     {
         $validatedData = $request->validate([
             'description' => 'required|string',
         ]);
-        $attachment->description = $validatedData['description'];
-        $attachment->save();
+        $attachment->update($validatedData);
         return response()->json($attachment);
     }
 
-    public function destroy(Attachment $attachment)
+    public function destroy(Document $document,Attachment $attachment)
     {
         $attachment->delete();
-
         return response()->json(['message' => 'Attachment deleted successfully']);
     }
 }

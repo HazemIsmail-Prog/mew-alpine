@@ -1,15 +1,11 @@
 <?php
 
 use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\ContractController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\StakeholderController;
 use App\Http\Controllers\StepController;
-use App\Livewire\Pages\Contracts\ContractIndex;
-use App\Livewire\Pages\Documents\DocumentIndex;
-use App\Livewire\Pages\Stakeholders\StakeholderIndex;
-use App\Livewire\Pages\Users\UserIndex;
-use App\Models\Contract;
-use App\Models\Document;
-use App\Models\Stakeholder;
-use App\Models\User;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -22,22 +18,35 @@ Route::middleware('auth')->group(function () {
     Route::view('profile', 'profile')
         ->name('profile');
 
-    Route::get('/users', UserIndex::class)->name('users.index')->can('viewAny', User::class);
-    Route::get('/contracts', ContractIndex::class)->name('contracts.index')->can('viewAny', Contract::class);
-    Route::get('/stakeholders', StakeholderIndex::class)->name('stakeholders.index')->can('viewAny', Stakeholder::class);
-    Route::get('/documents', DocumentIndex::class)->name('documents.index')->can('viewAny', Document::class);
+    Route::apiResource('/contracts', ContractController::class)->except('show');
+    Route::controller(ContractController::class)->group(function () {
+        Route::get('/contracts/getData', 'getData');
+        Route::put('/contracts/{contract}/toggle-active', 'toggleActive');
+    });
 
-    Route::post('/steps', [StepController::class, 'store'])->can('createSteps', Document::class);
-    Route::patch('/steps/{step}', [StepController::class, 'toggleCompleted'])->can('updateSteps', Document::class);
-    Route::get('/steps/{document}', [StepController::class, 'getSteps'])->can('viewSteps', Document::class);
-    Route::patch('/steps/{step}', [StepController::class, 'update'])->can('updateSteps', Document::class);
-    Route::delete('/steps/{step}', [StepController::class, 'destroy'])->can('deleteSteps', Document::class);
-    
-    
-    Route::post('/attachments', [AttachmentController::class, 'store'])->can('createAttachments', Document::class);
-    Route::get('/attachments/{document}', [AttachmentController::class, 'getAttachments'])->can('viewAttachments', Document::class);
-    Route::patch('/attachments/{attachment}', [AttachmentController::class, 'update'])->can('updateAttachments', Document::class);
-    Route::delete('/attachments/{attachment}', [AttachmentController::class, 'destroy'])->can('deleteAttachments', Document::class);
+    Route::apiResource('/stakeholders', StakeholderController::class)->except('show');
+    Route::controller(StakeholderController::class)->group(function () {
+        Route::get('/stakeholders/getData', 'getData');
+        Route::put('/stakeholders/{stakeholder}/toggle-active', 'toggleActive');
+    });
+
+    Route::apiResource('/users', UserController::class)->except('show');
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/users/getData', 'getData');
+        Route::put('/users/{user}/toggle-active', 'toggleActive');
+    });
+
+    Route::apiResource('/documents', DocumentController::class)->except('show');
+    Route::controller(DocumentController::class)->group(function () {
+        Route::get('/documents/getData', 'getData');
+        Route::put('/documents/{document}/toggle-completed', 'toggleCompleted');
+    });
+
+    Route::apiResource('/documents/{document}/steps', StepController::class)->except('show');
+    Route::put('/documents/{document}/steps/{step}/toggle-completed', [StepController::class, 'toggleCompleted']);
+    Route::post('/documents/{document}/steps/reorder', [StepController::class, 'reorderSteps']);
+
+    Route::apiResource('/documents/{document}/attachments', AttachmentController::class)->except('show');
 });
 
 
