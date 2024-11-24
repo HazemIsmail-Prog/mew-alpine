@@ -32,7 +32,7 @@
     <x-searchable-dropdown id="filters.follower_ids" label="{{ __('Follower') }}" :list="$users" :multiple="true"
     model="filters.follower_ids" />
 
-    <x-searchable-dropdown id="filters.tag_ids" label="{{ __('Tags') }}" :list="$tags" :multiple="true"
+    <x-searchable-dropdown id="filters.tag_ids" label="{{ __('Tag') }}" :list="$tags" :multiple="true"
     model="filters.tag_ids" />
 
     <x-searchable-dropdown id="filters.types" label="{{ __('Type') }}" :list="$typesList" :multiple="true"
@@ -41,8 +41,8 @@
     <x-searchable-dropdown id="filters.statuses" label="{{ __('Status') }}" :list="$statusesList" :multiple="true"
     model="filters.statuses" />
 
-    <button x-cloak x-show="hasFilters" x-on:click="resetFilters()"
-        class="text-primary self-end border h-[42px] whitespace-nowrap border-primary p-2 rounded-md">
+    <button x-cloak x-bind:disabled="!hasFilters" x-on:click="resetFilters()"
+        class="text-primary disabled:text-gray-400 disabled:border-gray-400 disabled:cursor-not-allowed self-end border h-[42px] whitespace-nowrap border-primary p-2 rounded-md">
         {{ __('Reset') }}
     </button>
 </div>

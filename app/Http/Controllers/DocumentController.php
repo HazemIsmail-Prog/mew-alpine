@@ -75,9 +75,8 @@ class DocumentController extends Controller
         $documents = Document::query()
             ->with('tags:id')
             ->with('users:id')
-            ->with('uncompletedSteps',function($q){
+            ->with('uncompletedSteps', function ($q) {
                 $q->orderBy('order', 'asc');
-
             })
             ->when(isset($filters['search']), function (Builder $q) use ($filters) {
                 $q->where(function (Builder $q) use ($filters) {
@@ -122,8 +121,18 @@ class DocumentController extends Controller
             ->when(isset($filters['types']), function (Builder $q) use ($filters) {
                 $q->whereIn('type', $filters['types']);
             })
+            ->when(isset($filters['statuses']), function (Builder $q) use ($filters) {
+                $q->where(function (Builder $q) use ($filters) {
+                    if (in_array('completed', $filters['statuses'])) {
+                        $q->orWhere('is_completed', true);
+                    }
+                    if (in_array('pending', $filters['statuses'])) {
+                        $q->orWhere('is_completed', false);
+                    }
+                });
+            })
             // ->orderBy('is_completed') // Sorts documents with uncompleted steps first
-            ->latest() // Then sorts by id in descending order
+            ->latest()
             ->paginate(50);
         return response()->json($documents);
     }

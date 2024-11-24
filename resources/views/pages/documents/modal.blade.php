@@ -2,7 +2,7 @@
 <div x-show="showModal"
     class="flex flex-col gap-3 bg-primary px-3 bg-opacity-5 h-full overflow-y-auto w-full lg:w-[416px] transition-all duration-150">
     <div class="p-2 border-b border-primary flex items-center justify-between text-primary font-extrabold">
-        <span x-text="form.id ? '{{ __('Edit') }} - '+ form.name : '{{ __('New Record') }}'"></span>
+        <span x-text="form.id ? '{{ __('Edit Document') }}' : '{{ __('New Document') }}'"></span>
     </div>
 
 

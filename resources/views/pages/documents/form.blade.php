@@ -1,5 +1,5 @@
 <div class="flex flex-col p-3 gap-3 border border-primary border-dashed rounded-lg">
-    <h1 class="text-primary font-extrabold">{{ __('Record Details') }}</h1>
+    <h1 class="text-primary font-extrabold">{{ __('Document Details') }}</h1>
 
     <x-searchable-dropdown id="form.contract_id" label="{{ __('Contract') }}" :list="$contracts" :multiple="false"
         model="form.contract_id" />
@@ -28,7 +28,7 @@
         {{-- <x-input-error :messages="$errors->get('form.title')" /> --}}
     </div>
     <div>
-        <x-input-label for="content" :value="__('Content')" />
+        <x-input-label for="content" :value="__('Contents')" />
         <textarea id="content" class="w-full rounded-md focus:outline-none focus:ring-0 border-none outline-none"
             x-model="form.content" rows="2"></textarea>
         {{-- <x-input-error :messages="$errors->get('form.content')" /> --}}
