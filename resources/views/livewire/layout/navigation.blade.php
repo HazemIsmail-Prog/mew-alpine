@@ -40,6 +40,11 @@ new class extends Component {
                             {{ __('Stakeholders') }}
                         </x-nav-link>
                     @endcan
+                    @can('viewAny', App\Models\Tag::class)
+                        <x-nav-link :href="route('tags.index')" :active="request()->routeIs('tags.index')" wire:navigate>
+                            {{ __('Tags') }}
+                        </x-nav-link>
+                    @endcan
                     @can('viewAny', App\Models\Document::class)
                         <x-nav-link :href="route('documents.index')" :active="request()->routeIs('documents.index')" wire:navigate>
                             {{ __('Documents') }}

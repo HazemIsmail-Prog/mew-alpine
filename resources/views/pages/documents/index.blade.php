@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div x-data="page()" x-on:steps-updated="fetchRecords" class="flex h-full">
+    <div x-data="page()" x-on:steps-updated="fetchRecord($event.detail.documentId)" class="flex h-full">
 
         {{-- List --}}
         <div class="flex-1 mx-auto overflow-auto">
@@ -14,7 +14,7 @@
                     </template>
 
                     {{-- Load More Button --}}
-                    <div x-intersect="loadMore" x-show="currentPage < totalPages" class="text-center p-8">
+                    <div x-intersect.margin.200px="loadMore" x-show="currentPage < totalPages" class="text-center p-8">
                         <button type="button" class="text-primary font-bold">{{ __('Loading more...') }}</button>
                     </div>
                 </div>
@@ -66,6 +66,7 @@
             form: [],
             currentPage: 1,
             totalPages: 1,
+            totalResults: 0,
 
             init() {
                 this.$watch('filters', value => {
@@ -83,6 +84,21 @@
                 Object.keys(this.filters).forEach(key => this.filters[key] = []);
             },
 
+            fetchRecord(id) {
+                axios.get(`/${this.route}/${id}`)
+                    .then((response) => {
+                        const updatedRecord = response.data;
+                        // Find the record in the records array and update it
+                        const index = this.records.findIndex(record => record.id === updatedRecord.id);
+                        if (index !== -1) {
+                            this.records.splice(index, 1, updatedRecord); // Replace the existing record
+                        }
+                    })
+                    .catch((error) => {
+                        alert(error.response.data.message);
+                    });
+            },
+
             fetchRecords(page = 1) {
                 axios.get(`/${this.route}/getData`, {
                         params: {
@@ -92,14 +108,15 @@
                     })
                     .then((response) => {
                         const data = response.data;
-                        this.records = [];
+
                         if (page === 1) {
                             this.records = data.data;
                         } else {
                             this.records = [...this.records, ...data.data];
-                        }
+                        }                        
                         this.currentPage = data.current_page;
                         this.totalPages = data.last_page;
+                        this.totalResults = data.total;
                     })
                     .catch((error) => {
                         alert(error.response.data.message);
@@ -156,8 +173,14 @@
                     return;
                 axios.delete(`/${this.route}/${record.id}`)
                     .then(() => {
-                        this.showModal = false;
-                        this.fetchRecords()
+                        // Find the index of the record in the array
+                        const index = this.records.findIndex(r => r.id === record.id);
+                        if (index !== -1) {
+                            // Remove the record from the array
+                            this.records.splice(index, 1);
+                            this.totalResults--; // Decrease the total count
+                        }
+                        this.showModal = false; // Close the modal if it is open
                     })
                     .catch((error) => {
                         alert(error.response.data.message);

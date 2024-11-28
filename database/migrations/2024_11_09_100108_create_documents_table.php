@@ -20,8 +20,10 @@ return new class extends Migration
             $table->string('type'); // ['incoming','outgoing']
             $table->text('title');
             $table->string('ref')->nullable();
+            $table->string('hyperlink')->nullable();
             $table->text('content')->nullable();
             $table->text('notes')->nullable();
+            $table->date('date')->nullable();
             $table->boolean('is_completed')->default(false); // ['completed','pending']
             $table->timestamps();
         });

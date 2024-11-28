@@ -16,7 +16,6 @@ class Document extends Model
 
     protected static function booted(): void
     {
-
         static::creating(function ($model) {
             $model->created_by = Auth::id();
             $model->is_completed = false;

@@ -40,4 +40,5 @@
             x-model="form.notes" rows="2"></textarea>
         {{-- <x-input-error :messages="$errors->get('form.notes')" /> --}}
     </div>
+
 </div>

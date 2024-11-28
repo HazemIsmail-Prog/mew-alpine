@@ -103,7 +103,9 @@
                         newPosition: newPosition,
                     })
                     .then(response => {
-                        this.$dispatch('steps-updated');
+                        this.$dispatch('steps-updated', {
+                            documentId: this.stepForm.document_id
+                        });;
                     })
                     .catch(error => {
                         console.error("Error updating order:", error.response.data.message);
@@ -133,7 +135,9 @@
                     .then((response) => {
                         this.stepForm.action = '';
                         this.steps.push(response.data)
-                        this.$dispatch('steps-updated')
+                        this.$dispatch('steps-updated', {
+                            documentId: this.stepForm.document_id
+                        });
                     })
                     .catch((error) => {
                         alert(error.response.data.message);
@@ -185,7 +189,10 @@
                     .then((response) => {
                         step.action = response.data.action
                         step.isEditing = false;
-                        this.$dispatch('steps-updated')
+                        this.$dispatch('steps-updated', {
+                            documentId: this.stepForm.document_id
+                        });
+
                     })
                     .catch((error) => {
                         alert(error.response.data.message);
@@ -210,7 +217,10 @@
                 axios.delete(`documents/${this.stepForm.document_id}/steps/${step.id}`)
                     .then((response) => {
                         this.steps = this.steps.filter(s => s.id !== step.id);
-                        this.$dispatch('steps-updated')
+                        this.$dispatch('steps-updated', {
+                            documentId: this.stepForm.document_id
+                        });
+
                     })
                     .catch((error) => {
                         alert(error.response.data.message);
@@ -221,7 +231,10 @@
                 axios.put(`documents/${this.stepForm.document_id}/steps/${step.id}/toggle-completed`, step)
                     .then((response) => {
                         step.is_completed = response.data.is_completed
-                        this.$dispatch('steps-updated')
+                        this.$dispatch('steps-updated', {
+                            documentId: this.stepForm.document_id
+                        });
+
                     })
                     .catch((error) => {
                         alert(error.response.data.message);

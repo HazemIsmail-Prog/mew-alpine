@@ -1,20 +1,23 @@
 {{-- Search and Create New Button --}}
-<div class="flex items-center justify-end gap-3 my-3 px-4">
+<div class="flex items-center justify-between gap-3 my-3 px-4">
 
-    <button x-on:click="openModal(null,'outgoing')" type="button"
-        class="flex items-center justify-center gap-1 h-9 py-1 w-28 rounded-lg text-white font-bold !bg-danger px-4">
-        <x-svg.outbox class=" size-6" />
-        <span class="hidden md:block">
-            {{ __('Outgoing') }}
-        </span>
-    </button>
-    <button x-on:click="openModal(null,'incoming')" type="button"
-        class="flex items-center justify-center gap-1 h-9 py-1 w-28 rounded-lg text-white font-bold !bg-success px-4">
-        <x-svg.inbox class=" size-6" />
-        <span class="hidden md:block">
-            {{ __('Incoming') }}
-        </span>
-    </button>
+    <p>{{__('Results')}}: <span x-text="totalResults"></span></p>
+    <div class=" flex items-center gap-3">
+        <button x-on:click="openModal(null,'outgoing')" type="button"
+            class="flex items-center justify-center gap-1 h-9 py-1 w-28 rounded-lg text-white font-bold !bg-danger px-4">
+            <x-svg.outbox class=" size-6" />
+            <span class="hidden md:block">
+                {{ __('Outgoing') }}
+            </span>
+        </button>
+        <button x-on:click="openModal(null,'incoming')" type="button"
+            class="flex items-center justify-center gap-1 h-9 py-1 w-28 rounded-lg text-white font-bold !bg-success px-4">
+            <x-svg.inbox class=" size-6" />
+            <span class="hidden md:block">
+                {{ __('Incoming') }}
+            </span>
+        </button>
+    </div>
 </div>
 
 <div class=" p-2 border border-dashed border-primary rounded-md mt-2 flex flex-col lg:flex-row items-start gap-2">

@@ -18,20 +18,20 @@ class DocumentController extends Controller
         $contracts = Contract::query()
             ->whereRelation('users', 'user_id', '=', Auth::id())
             ->leftJoin('documents', 'contracts.id', '=', 'documents.contract_id')
-            ->select('contracts.*')
+            ->select('contracts.id', 'contracts.name')
             ->selectRaw('COUNT(documents.id) as usage_count')
-            ->groupBy('contracts.id')
+            ->groupBy('contracts.id', 'contracts.name')
             ->orderByDesc('usage_count')
             ->orderBy('name') // Optional secondary ordering by name
             ->get();
 
         $stakeholders = Stakeholder::query()
+            ->where('stakeholders.id', '!=', Auth::user()->stakeholder_id)
             ->leftJoin('documents as from_docs', 'stakeholders.id', '=', 'from_docs.from_id')
             ->leftJoin('documents as to_docs', 'stakeholders.id', '=', 'to_docs.to_id')
-            ->select('stakeholders.*')
+            ->select('stakeholders.id', 'stakeholders.name')
             ->selectRaw('COUNT(from_docs.id) + COUNT(to_docs.id) as usage_count')
-            ->where('stakeholders.id', '!=', Auth::user()->stakeholder_id)
-            ->groupBy('stakeholders.id')
+            ->groupBy('stakeholders.id', 'stakeholders.name')
             ->orderByDesc('usage_count')
             ->orderBy('name') // Optional secondary ordering by name
             ->get();
@@ -133,8 +133,19 @@ class DocumentController extends Controller
             })
             // ->orderBy('is_completed') // Sorts documents with uncompleted steps first
             ->latest()
-            ->paginate(50);
+            ->paginate(30);
         return response()->json($documents);
+    }
+
+    public function show(Document $document)
+    {
+        $currentDocument = Document::query()
+            ->where('id', $document->id)
+            ->with('uncompletedSteps', function ($q) {
+                $q->orderBy('order', 'asc');
+            })
+            ->first();
+        return response()->json($currentDocument);
     }
 
     public function store(Request $request)
