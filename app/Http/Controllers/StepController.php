@@ -12,8 +12,8 @@ class StepController extends Controller
     public function index(Document $document)
     {
         $steps = $document->steps()
-            ->orderBy('id', 'asc')
-            ->orderBy('order', 'asc')
+        ->orderBy('order', 'asc')
+        ->orderBy('id', 'asc')
             ->get();
         return response()->json($steps);
     }
