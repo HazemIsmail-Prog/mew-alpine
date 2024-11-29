@@ -73,6 +73,7 @@ class DocumentController extends Controller
 
         $filters = $request->query('filters');
         $documents = Document::query()
+        ->whereIn('contract_id',Auth::user()->contracts()->pluck('id'))
             ->with('tags:id')
             ->with('users:id')
             ->with('uncompletedSteps', function ($q) {
