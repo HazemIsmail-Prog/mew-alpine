@@ -11,7 +11,9 @@ class StepController extends Controller
 {
     public function index(Document $document)
     {
-        $steps = $document->steps()->orderBy('order', 'asc')
+        $steps = $document->steps()
+            ->orderBy('id', 'desc')
+            ->orderBy('order', 'asc')
             ->get();
         return response()->json($steps);
     }
@@ -59,62 +61,6 @@ class StepController extends Controller
         return response()->json($step);
     }
 
-    // public function reorderSteps(Request $request, Document $document)
-    // {
-    //     $step = Step::find($request->id);
-    //     $currentPosition = $step->order;
-    //     $newPosition = $request->newPosition + 1;
-
-    //     if ($currentPosition === $newPosition) return;
-
-    //     $step->update(['order' => -1]);
-
-    //     $stepsWhichNeedsToBeShifted = Step::query()
-    //         ->where('document_id', $step->document_id)
-    //         ->whereBetween('order', [
-    //             min($currentPosition, $newPosition),
-    //             max($currentPosition, $newPosition)
-    //         ]);
-
-    //     if ($currentPosition < $newPosition) {
-    //         $stepsWhichNeedsToBeShifted->decrement('order');
-    //     } else {
-    //         $stepsWhichNeedsToBeShifted->increment('order');
-    //     }
-
-    //     $step->update(['order' => $newPosition + 1]);
-
-    //     return response()->json(['message' => 'Steps reordered successfully'], 200);
-    // }
-    // public function reorderSteps(Request $request, Document $document)
-    // {
-    //     $step = Step::findOrFail($request->id);
-    //     $currentPosition = $step->order;
-    //     $newPosition = $request->newPosition + 1;
-
-    //     if ($currentPosition === $newPosition) {
-    //         return response()->json(['message' => 'No reordering necessary'], 200);
-    //     }
-
-    //     // Temporarily set the order to -1 to avoid conflicts
-    //     $step->update(['order' => -1]);
-
-    //     // Determine the direction of movement and update other steps accordingly
-    //     if ($currentPosition < $newPosition) {
-    //         Step::where('document_id', $step->document_id)
-    //             ->whereBetween('order', [$currentPosition, $newPosition - 1])
-    //             ->decrement('order');
-    //     } else {
-    //         Step::where('document_id', $step->document_id)
-    //             ->whereBetween('order', [$newPosition, $currentPosition])
-    //             ->increment('order');
-    //     }
-
-    //     // Update the moved step to its new position
-    //     $step->update(['order' => $newPosition]);
-
-    //     return response()->json(['message' => 'Steps reordered successfully'], 200);
-    // }
     public function reorderSteps(Request $request, Document $document)
     {
         $step = Step::findOrFail($request->id);
