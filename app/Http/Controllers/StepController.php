@@ -63,6 +63,12 @@ class StepController extends Controller
 
     public function reorderSteps(Request $request, Document $document)
     {
+
+        if ($request->user()->cannot('updateSteps', $document)) {
+            abort(403);
+        }
+
+
         $step = Step::findOrFail($request->id);
         $currentPosition = $step->order;
         $newPosition = $request->newPosition + 1;
