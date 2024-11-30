@@ -6,20 +6,29 @@ use App\Models\Document;
 use App\Models\Step;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StepController extends Controller
 {
     public function index(Document $document)
     {
+        if (Auth::user()->cannot('viewSteps', $document)) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $steps = $document->steps()
-        ->orderBy('order', 'asc')
-        ->orderBy('id', 'asc')
+            ->orderBy('order', 'asc')
+            ->orderBy('id', 'asc')
             ->get();
         return response()->json($steps);
     }
 
     public function store(Request $request, Document $document)
     {
+        if (Auth::user()->cannot('createSteps', $document)) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $position = $document->steps()->max('order') + 1;
         $validatedData = $request->validate([
             'action' => 'required|string',
@@ -32,6 +41,10 @@ class StepController extends Controller
 
     public function update(Request $request, Document $document, Step $step)
     {
+        if (Auth::user()->cannot('updateSteps', $document)) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $request->validate([
             'action' => 'required|string',
         ]);
@@ -41,6 +54,9 @@ class StepController extends Controller
 
     public function destroy(Document $document, Step $step)
     {
+        if (Auth::user()->cannot('deleteSteps', $document)) {
+            abort(403, 'Unauthorized action.');
+        }
         // Delete the specified step
         $step->delete();
 
@@ -54,6 +70,10 @@ class StepController extends Controller
 
     public function toggleCompleted(Request $request, Document $document, Step $step)
     {
+        if (Auth::user()->cannot('updateSteps', $document)) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $validatedData = $request->validate([
             'is_completed' => 'required|boolean',
         ]);
@@ -64,8 +84,8 @@ class StepController extends Controller
     public function reorderSteps(Request $request, Document $document)
     {
 
-        if ($request->user()->cannot('updateSteps', $document)) {
-            abort(403);
+        if (Auth::user()->cannot('updateSteps', $document)) {
+            abort(403, 'Unauthorized action.');
         }
 
 

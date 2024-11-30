@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Document;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Log;
 
 class DocumentPolicy
 {
@@ -64,6 +65,7 @@ class DocumentPolicy
     
     public function delete(User $user, Document $document): bool
     {
+        Log::info('delete');
         return $user->role === 'admin';
     }
     

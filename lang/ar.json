@@ -23,8 +23,8 @@
     "or drag and drop":"or drag and drop",
     "Document Details":"تفاصيل المستند",
     "Follwers":"مسؤولي المتابعة",
-    "Sender":"من",
-    "Receiver":"الى",
+    "Sender":"وارد من",
+    "Receiver":"صادر الى",
     "Title":"الموضوع",
     "Contents":"المحتويات",
     "Notes":"الملاحظات",
@@ -43,5 +43,7 @@
     "Pending":"معلق",
     "Results":"النتائج",
     "Loading more...":"تحميل المزيد...",
+    "No Steps":"لا يوجد اجراءات",
+    "No Attachments":"لا يوجد مرفقات",
     "":""
 }

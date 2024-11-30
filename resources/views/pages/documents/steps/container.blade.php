@@ -1,80 +1,32 @@
 <div x-cloak x-show="stepForm.document_id" x-model="stepForm.document_id" x-modelable="form.id" x-data="stepsSection()"
     class="p-3 border border-primary border-dashed rounded-lg">
+
     <h1 class="text-primary font-extrabold mb-3">{{ __('Steps') }}</h1>
 
     @canany(['updateSteps', 'viewSteps', 'deleteSteps'], App\Models\Document::class)
-        <div x-sort.ghost="handle">
 
+        <template x-if="fetchingSteps">
+            <div class=" flex items-center justify-center">
+                <x-svg.spinner class=" size-6 text-primary animate-spin" />
+            </div>
+        </template>
 
-            <template x-for="step in steps" :key="step.id">
-                {{-- Step Row --}}
-                <div x-sort:item="step.id" class="flex items-center gap-2 py-1 border-b border-primary border-dashed">
-                    <div class="flex-1 flex items-center gap-2">
-                        @can('updateSteps', App\Models\Document::class)
-                            <input x-model="step.is_completed" x-on:change="toggleStepCompleted(step)"
-                                x-bind:checked="step.is_completed" type="checkbox" value=""
-                                class="w-4 h-4 text-primary bg-primary bg-opacity-5 border-primary rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <template x-if="step.isEditing">
-                                <textarea class="w-full focus:outline-none focus:ring-0 border-none outline-none" x-trap="step.isEditing"
-                                    x-on:keydown.ctrl.enter.prevent="confirmEditStep(step)" x-on:keydown.esc.prevent="cancelEditStep(step)"
-                                    x-model="step.action" rows="3"></textarea>
-                            </template>
-                        @endcan
-                        @can('viewSteps', App\Models\Document::class)
-                            <template x-if="!step.isEditing">
-                                <label class="text-sm  dark:text-gray-300 whitespace-pre-line"
-                                    x-bind:class="step.is_completed ? 'text-gray-900' : 'text-red-500'"
-                                    x-html="step.action"></label>
-                            </template>
-                        @endcan
-                    </div>
-                    <div class="flex items-center gap-1">
-                        @can('updateSteps', App\Models\Document::class)
-                            <template x-if="!step.isDeleting && !step.isEditing">
-                                <x-svg.edit x-on:click="editStep(step)" class=" text-primary size-4" />
-                            </template>
-                            <template x-if="step.isEditing">
-                                <div class=" flex items-center gap-2">
-                                    <x-svg.tick x-show="step.action" x-on:click="confirmEditStep(step)"
-                                        class=" text-green-500 size-4" />
-                                    <x-svg.cancel x-on:click="cancelEditStep(step)" class="text-red-500 size-4" />
-                                </div>
-                            </template>
-                        @endcan
-                        @can('deleteSteps', App\Models\Document::class)
-                            <template x-if="!step.isDeleting && !step.isEditing">
-                                <x-svg.delete x-on:click="deleteStep(step)" class="text-red-500 size-4" />
-                            </template>
-                            <template x-if="step.isDeleting">
-                                <div class="flex items-center gap-1">
-                                    <x-svg.tick x-on:click="confirmDeleteStep(step)" class=" text-green-500 size-4" />
-                                    <x-svg.cancel x-on:click="cancelDeleteStep(step)" class="text-red-500 size-4" />
-                                </div>
-                            </template>
-                        @endcan
-                    </div>
-                </div>
-            </template>
-        </div>
+        <template x-if="!steps.length && !fetchingSteps">
+            <p class=" text-center text-primary">{{ __('No Steps') }}</p>
+        </template>
+
+        <template x-if="form.can_update">
+            @include('pages.documents.steps.editable-list')
+        </template>
+
+        <template x-if="!form.can_update">
+            @include('pages.documents.steps.reading-list')
+        </template>
+        
     @endcanany
 
-    {{-- New Step Form Section --}}
     @can('createSteps', App\Models\Document::class)
-        <div class="flex gap-2 flex-col mt-2">
-            <div class="flex items-center gap-2">
-                <textarea rows="2" class="w-full focus:outline-none focus:ring-0 border-none outline-none"
-                    x-ref="newStepActionTextarea" x-model="stepForm.action" x-on:keydown.ctrl.enter.prevent="createStep"></textarea>
-                <x-svg.save class="text-primary size-4" x-show="stepForm.action" x-on:click="createStep" />
-                <x-svg.cancel class="text-red-500 size-4" x-show="stepForm.action" x-on:click="stepForm.action = ''" />
-            </div>
-            <div class="flex items-center gap-2 flex-wrap">
-                <template x-for="word in mostUsedWords" :key="word">
-                    <span x-on:click="appendWord(word)"
-                        class=" cursor-pointer bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300"
-                        x-text="word"></span>
-                </template>
-            </div>
-        </div>
+        @include('pages.documents.steps.form')
     @endcan
 
 </div>
@@ -84,6 +36,7 @@
     function stepsSection() {
         return {
             showSteps: true,
+            fetchingSteps: false,
             steps: [],
             stepForm: {
                 document_id: null,
@@ -91,8 +44,13 @@
                 is_completed: false,
             },
             // Define your list of most used words
-            mostUsedWords: ['المراقب للاعتماد', 'المراقب للتحويل', 'م. مصطفى للمراجعة', 'السكرتارية للحفظ والتحويل',
-                'المدير للاعتماد', new Date().toLocaleDateString('en-GB').replace(/\//g, '-')
+            mostUsedWords: [
+                'المراقب للاعتماد',
+                'المراقب للتحويل',
+                'م. مصطفى للمراجعة',
+                'السكرتارية للحفظ والتحويل',
+                'المدير للاعتماد',
+                new Date().toLocaleDateString('en-GB').replace(/\//g, '-'),
             ],
 
             handle(id, newPosition) {
@@ -157,12 +115,16 @@
             },
 
             fetchSteps() {
+                this.fetchingSteps = true;
                 axios.get(`documents/${this.stepForm.document_id}/steps`)
                     .then((response) => {
                         this.steps = response.data;
                     })
                     .catch((error) => {
                         alert(error.response.data.message);
+                    })
+                    .finally(() => {
+                        this.fetchingSteps = false;
                     });
             },
 

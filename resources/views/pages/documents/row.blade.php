@@ -1,14 +1,16 @@
 <div class="flex items-center gap-3 w-full lg:w-3/5 " x-bind:class="{ 'self-end': record.type == 'incoming' }">
 
-    <div>
-        <label x-on:change="toggleRecordIsCompleted(record, $event.target.checked)"
-            class="inline-flex items-center cursor-pointer">
-            <input :checked="record.is_completed" type="checkbox" class="hidden peer">
-            <div
-                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary">
-            </div>
-        </label>
-    </div>
+    <template x-if="record.can_update">
+        <div>
+            <label x-on:change="toggleRecordIsCompleted(record, $event.target.checked)"
+                class="inline-flex items-center cursor-pointer">
+                <input :checked="record.is_completed" type="checkbox" class="hidden peer">
+                <div
+                    class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary">
+                </div>
+            </label>
+        </div>
+    </template>
 
     <div x-on:click="openModal(record)"
         x-bind:class="['flex-1 flex items-center justify-between cursor-pointer border rounded-lg p-2',
@@ -42,13 +44,15 @@
         <div class=" flex flex-col gap-1 items-start">
             <template x-for="step in record.uncompleted_steps" :key="step.id">
                 <span
-                    class="whitespace-pre-line cursor-pointer bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300" 
-                    x-html="step.action"
-                ></span>
+                    class="whitespace-pre-line cursor-pointer bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
+                    x-html="step.action"></span>
             </template>
         </div>
     </div>
 
-    <x-svg.delete x-on:click="deleteRecord(record)" class="text-primary size-6" />
+    <template x-if="record.can_delete">
+        <x-svg.delete x-on:click="deleteRecord(record)" class="text-primary size-6" />
+    </template>
+
 
 </div>

@@ -57,6 +57,8 @@
                     notes: record?.notes ?? '',
                     follow_ids: record?.follow_ids ?? [],
                     tag_ids: record?.tag_ids ?? [],
+                    can_update: record?.can_update ?? true,
+                    can_delete: record?.can_delete ?? true,
                 };
             },
             // ######################### Variables
@@ -87,7 +89,7 @@
             fetchRecord(id) {
                 axios.get(`/${this.route}/${id}`)
                     .then((response) => {
-                        const updatedRecord = response.data;
+                        const updatedRecord = response.data.data;
                         // Find the record in the records array and update it
                         const index = this.records.findIndex(record => record.id === updatedRecord.id);
                         if (index !== -1) {
@@ -113,10 +115,10 @@
                             this.records = data.data;
                         } else {
                             this.records = [...this.records, ...data.data];
-                        }                        
-                        this.currentPage = data.current_page;
-                        this.totalPages = data.last_page;
-                        this.totalResults = data.total;
+                        }
+                        this.currentPage = data.meta.current_page;
+                        this.totalPages = data.meta.last_page;
+                        this.totalResults = data.meta.total;
                     })
                     .catch((error) => {
                         alert(error.response.data.message);
@@ -149,16 +151,22 @@
                         data: this.form
                     })
                     .then((response) => {
-                        const data = response.data;
+
+                        const data = response.data.data;
+
                         if (this.form.id) {
-                            // Update the record in the records list
-                            const index = this.records.findIndex(record => record.id === data.id);
-                            if (index !== -1) {
-                                this.records.splice(index, 1, data);
+                            if (this.hasFilters) {
+                                this.fetchRecords();
+                            } else {
+                                // Update the record in the records list
+                                const index = this.records.findIndex(record => record.id === data.id);
+                                if (index !== -1) {
+                                    this.records.splice(index, 1, data);
+                                }
                             }
                         } else {
                             // Add the new record to the records list
-                            this.resetFilters();
+                            this.resetFilters();                           
                             this.records.unshift(data);
                             this.openModal(data);
                         }
@@ -192,12 +200,15 @@
                         is_completed: isCompleted
                     })
                     .then((response) => {
-                        this.fetchRecords();
-                        // const data = response.data;
-                        // const index = this.records.findIndex(r => r.id === record.id);
-                        // if (index !== -1) {
-                        //     this.records.splice(index, 1, data);
-                        // }
+                        const data = response.data.data;
+                        if (this.filters.statuses.length) {
+                            this.fetchRecords()
+                        } else {
+                            const index = this.records.findIndex(r => r.id === record.id);
+                            if (index !== -1) {
+                                this.records.splice(index, 1, data);
+                            }
+                        }
                     })
                     .catch((error) => {
                         alert(error.response.data.message);

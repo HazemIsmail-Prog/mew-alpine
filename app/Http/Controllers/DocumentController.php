@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DocumentResource;
 use App\Models\Contract;
 use App\Models\Document;
 use App\Models\Stakeholder;
@@ -54,8 +55,6 @@ class DocumentController extends Controller
             ['id' => 'pending', 'name' => __('Pending')],
         ];
 
-
-
         return view('pages.documents.index', [
             'contracts' => $contracts,
             'stakeholders' => $stakeholders,
@@ -68,12 +67,11 @@ class DocumentController extends Controller
 
     public function getData(Request $request)
     {
-
         $authStakeholderId = Auth::user()->stakeholder_id;
 
         $filters = $request->query('filters');
         $documents = Document::query()
-        ->whereIn('contract_id',Auth::user()->contracts()->pluck('id'))
+            ->whereIn('contract_id', $request->user()->contracts()->pluck('id'))
             ->with('tags:id')
             ->with('users:id')
             ->with('uncompletedSteps', function ($q) {
@@ -135,7 +133,8 @@ class DocumentController extends Controller
             // ->orderBy('is_completed') // Sorts documents with uncompleted steps first
             ->latest()
             ->paginate(30);
-        return response()->json($documents);
+
+            return DocumentResource::collection($documents);
     }
 
     public function show(Document $document)
@@ -146,7 +145,7 @@ class DocumentController extends Controller
                 $q->orderBy('order', 'asc');
             })
             ->first();
-        return response()->json($currentDocument);
+            return new DocumentResource($currentDocument);
     }
 
     public function store(Request $request)
@@ -167,7 +166,7 @@ class DocumentController extends Controller
         $document = Document::create($request->except('follow_ids', 'tag_ids'));
         $document->users()->sync($request->follow_ids);
         $document->tags()->sync($request->tag_ids);
-        return response()->json($document, 201);
+        return new DocumentResource($document);
     }
 
     public function update(Request $request, Document $document)
@@ -178,7 +177,7 @@ class DocumentController extends Controller
             'to_id' => 'required',
             'type' => 'required',
             'title' => 'required',
-            'is_completed' => 'required|boolean',
+            // 'is_completed' => 'required|boolean',
             'ref' => 'nullable',
             'content' => 'nullable',
             'notes' => 'nullable',
@@ -186,10 +185,10 @@ class DocumentController extends Controller
             'tag_ids' => 'nullable|array',
         ]);
 
-        $document->update($request->except('follow_ids', 'tag_ids'));
+        $document->update($request->except('follow_ids', 'tag_ids','is_completed'));
         $document->users()->sync($request->follow_ids);
         $document->tags()->sync($request->tag_ids);
-        return response()->json($document->load('uncompletedSteps'));
+        return new DocumentResource($document);
     }
 
     public function destroy($id)
@@ -203,6 +202,6 @@ class DocumentController extends Controller
     {
         $document->is_completed = $request->input('is_completed');
         $document->save();
-        return response()->json($document->load('uncompletedSteps'));
+        return new DocumentResource($document);
     }
 }

@@ -22,31 +22,31 @@ new class extends Component {
             <div class="flex">
                 <!-- Navigation Links -->
                 <div class="hidden gap-6 sm:-my-px sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" >
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     @can('viewAny', App\Models\User::class)
-                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" wire:navigate>
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" >
                             {{ __('Users') }}
                         </x-nav-link>
                     @endcan
                     @can('viewAny', App\Models\Contract::class)
-                        <x-nav-link :href="route('contracts.index')" :active="request()->routeIs('contracts.index')" wire:navigate>
+                        <x-nav-link :href="route('contracts.index')" :active="request()->routeIs('contracts.index')" >
                             {{ __('Contracts') }}
                         </x-nav-link>
                     @endcan
                     @can('viewAny', App\Models\Stakeholder::class)
-                        <x-nav-link :href="route('stakeholders.index')" :active="request()->routeIs('stakeholders.index')" wire:navigate>
+                        <x-nav-link :href="route('stakeholders.index')" :active="request()->routeIs('stakeholders.index')" >
                             {{ __('Stakeholders') }}
                         </x-nav-link>
                     @endcan
                     @can('viewAny', App\Models\Tag::class)
-                        <x-nav-link :href="route('tags.index')" :active="request()->routeIs('tags.index')" wire:navigate>
+                        <x-nav-link :href="route('tags.index')" :active="request()->routeIs('tags.index')" >
                             {{ __('Tags') }}
                         </x-nav-link>
                     @endcan
                     @can('viewAny', App\Models\Document::class)
-                        <x-nav-link :href="route('documents.index')" :active="request()->routeIs('documents.index')" wire:navigate>
+                        <x-nav-link :href="route('documents.index')" :active="request()->routeIs('documents.index')" >
                             {{ __('Documents') }}
                         </x-nav-link>
                     @endcan
@@ -75,7 +75,7 @@ new class extends Component {
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile')" wire:navigate>
+                        <x-dropdown-link :href="route('profile')" >
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
@@ -108,7 +108,7 @@ new class extends Component {
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" >
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
@@ -122,7 +122,7 @@ new class extends Component {
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile')" wire:navigate>
+                <x-responsive-nav-link :href="route('profile')" >
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 
