@@ -4,16 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TagController extends Controller
 {
     public function index()
     {
+        if (Auth::user()->cannot('viewAny', Tag::class)) {
+            abort(404);
+        }
         return view('pages.tags.index');
     }
 
     public function getData(Request $request)
     {
+        if (Auth::user()->cannot('viewAny', Tag::class)) {
+            abort(403, 'Unauthorized action.');
+        }
         $limit = 10;
         $filters = $request->query('filters');
 
@@ -30,6 +37,9 @@ class TagController extends Controller
 
     public function store(Request $request)
     {
+        if (Auth::user()->cannot('create', Tag::class)) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
@@ -39,29 +49,35 @@ class TagController extends Controller
         return response()->json($tag, 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Tag $tag)
     {
+        if (Auth::user()->cannot('update', $tag)) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        $tag = Tag::findOrFail($id);
         $tag->update($request->all());
 
         return response()->json($tag);
     }
 
-    public function destroy($id)
+    public function destroy(Tag $tag)
     {
-        $tag = Tag::findOrFail($id);
+        if (Auth::user()->cannot('delete', $tag)) {
+            abort(403, 'Unauthorized action.');
+        }
         $tag->delete();
 
         return response()->json(['message' => 'Tag deleted successfully']);
     }
 
-    public function toggleActive(Request $request, $id)
+    public function toggleActive(Request $request, Tag $tag)
     {
-        $tag = Tag::findOrFail($id);
+        if (Auth::user()->cannot('update', $tag)) {
+            abort(403, 'Unauthorized action.');
+        }
         $tag->is_active = $request->input('is_active');
         $tag->save();
 

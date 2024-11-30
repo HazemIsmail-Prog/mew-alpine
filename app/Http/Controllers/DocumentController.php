@@ -16,6 +16,9 @@ class DocumentController extends Controller
 {
     public function index()
     {
+        if (Auth::user()->cannot('viewAny', Document::class)) {
+            abort(404);
+        }
         $contracts = Contract::query()
             ->whereRelation('users', 'user_id', '=', Auth::id())
             ->leftJoin('documents', 'contracts.id', '=', 'documents.contract_id')
@@ -67,6 +70,9 @@ class DocumentController extends Controller
 
     public function getData(Request $request)
     {
+        if (Auth::user()->cannot('viewAny', Document::class)) {
+            abort(403, 'Unauthorized action.');
+        }
         $authStakeholderId = Auth::user()->stakeholder_id;
 
         $filters = $request->query('filters');
@@ -134,7 +140,7 @@ class DocumentController extends Controller
             ->latest()
             ->paginate(30);
 
-            return DocumentResource::collection($documents);
+        return DocumentResource::collection($documents);
     }
 
     public function show(Document $document)
@@ -145,11 +151,14 @@ class DocumentController extends Controller
                 $q->orderBy('order', 'asc');
             })
             ->first();
-            return new DocumentResource($currentDocument);
+        return new DocumentResource($currentDocument);
     }
 
     public function store(Request $request)
     {
+        if (Auth::user()->cannot('create', Document::class)) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'contract_id' => 'required',
             'from_id' => 'required',
@@ -171,6 +180,9 @@ class DocumentController extends Controller
 
     public function update(Request $request, Document $document)
     {
+        if (Auth::user()->cannot('update', $document)) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'contract_id' => 'required',
             'from_id' => 'required',
@@ -185,21 +197,26 @@ class DocumentController extends Controller
             'tag_ids' => 'nullable|array',
         ]);
 
-        $document->update($request->except('follow_ids', 'tag_ids','is_completed'));
+        $document->update($request->except('follow_ids', 'tag_ids', 'is_completed'));
         $document->users()->sync($request->follow_ids);
         $document->tags()->sync($request->tag_ids);
         return new DocumentResource($document);
     }
 
-    public function destroy($id)
+    public function destroy(Document $document)
     {
-        $document = Document::findOrFail($id);
+        if (Auth::user()->cannot('delete', $document)) {
+            abort(403, 'Unauthorized action.');
+        }
         $document->delete();
         return response()->json(['message' => 'Document deleted successfully']);
     }
 
     public function toggleCompleted(Request $request, Document $document)
     {
+        if (Auth::user()->cannot('update', $document)) {
+            abort(403, 'Unauthorized action.');
+        }
         $document->is_completed = $request->input('is_completed');
         $document->save();
         return new DocumentResource($document);

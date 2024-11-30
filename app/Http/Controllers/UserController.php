@@ -7,11 +7,17 @@ use App\Models\Stakeholder;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     public function index()
     {
+
+        if (Auth::user()->cannot('viewAny', User::class)) {
+            abort(404);
+        }
+
         $contracts = Contract::query()
             ->orderBy('name')
             ->get();
@@ -35,6 +41,9 @@ class UserController extends Controller
 
     public function getData(Request $request)
     {
+        if (Auth::user()->cannot('viewAny', User::class)) {
+            abort(403, 'Unauthorized action.');
+        }
         $filters = $request->query('filters');
         $users = User::query()
             ->with('contracts:id')
@@ -42,13 +51,15 @@ class UserController extends Controller
                 $q->where('name', 'like', "%" . $filters['search'] . "%");
             })
             ->latest()
-            ->paginate(10)
-        ;
+            ->paginate(10);
         return response()->json($users);
     }
 
     public function store(Request $request)
     {
+        if (Auth::user()->cannot('create', User::class)) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255',
@@ -62,8 +73,11 @@ class UserController extends Controller
         return response()->json($user, 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
+        if (Auth::user()->cannot('update', $user)) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255',
@@ -72,8 +86,7 @@ class UserController extends Controller
             'role' => 'required',
         ]);
 
-        $user = User::findOrFail($id);
-        $user->update($request->except('contract_ids','password'));
+        $user->update($request->except('contract_ids', 'password'));
         if ($request->password) {
             $user->password = $request->password;
             $user->save();
@@ -82,16 +95,20 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = User::findOrFail($id);
+        if (Auth::user()->cannot('delete', $user)) {
+            abort(403, 'Unauthorized action.');
+        }
         $user->delete();
         return response()->json(['message' => 'User deleted successfully']);
     }
 
-    public function toggleActive(Request $request, $id)
+    public function toggleActive(Request $request, User $user)
     {
-        $user = User::findOrFail($id);
+        if (Auth::user()->cannot('update', $user)) {
+            abort(403, 'Unauthorized action.');
+        }
         $user->is_active = $request->input('is_active');
         $user->save();
         return response()->json($user);
