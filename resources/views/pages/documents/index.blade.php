@@ -47,8 +47,8 @@
                 this.form = {
                     id: record?.id ?? null,
                     contract_id: record?.contract_id ?? null,
-                    from_id: record?.from_id ?? (type === 'outgoing' ? 1 : null),
-                    to_id: record?.to_id ?? (type === 'incoming' ? 1 : null),
+                    from_id: record?.from_id ?? null,
+                    to_id: record?.to_id ?? null,
                     type: record?.type ?? type,
                     title: record?.title ?? '',
                     is_completed: record?.is_completed ?? false,
@@ -132,9 +132,10 @@
 
             openModal(record = null, type) {
                 const isSameRecord = record?.id === this.form.id;
-                this.showModal = isSameRecord ? !this.showModal : true;
                 record = isSameRecord ? null : record;
+                this.showModal = isSameRecord ? !this.showModal : true;
                 this.fillForm(record, type);
+
             },
 
             closeModal() {
@@ -145,6 +146,8 @@
             submitRecord() {
                 const url = this.form.id ? `/${this.route}/${this.form.id}` : `/${this.route}`;
                 const method = this.form.id ? 'put' : 'post';
+
+
                 axios({
                         method: method,
                         url: url,
@@ -166,7 +169,7 @@
                             }
                         } else {
                             // Add the new record to the records list
-                            this.resetFilters();                           
+                            this.resetFilters();
                             this.records.unshift(data);
                             this.openModal(data);
                         }

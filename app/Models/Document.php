@@ -17,6 +17,12 @@ class Document extends Model
     protected static function booted(): void
     {
         static::creating(function ($model) {
+            if($model->type === 'incoming'){
+                $model->to_id = Auth::user()->stakeholder_id;
+            }
+            if($model->type === 'outgoing'){
+                $model->from_id = Auth::user()->stakeholder_id;
+            }
             $model->created_by = Auth::id();
             $model->is_completed = false;
         });
@@ -60,17 +66,5 @@ class Document extends Model
     public function attachments(): HasMany
     {
         return $this->hasMany(Attachment::class);
-    }
-
-    protected $appends = ['follow_ids','tag_ids'];
-
-    public function getFollowIdsAttribute()
-    {
-        return $this->users->pluck('id');
-    }
-    
-    public function getTagIdsAttribute()
-    {
-        return $this->tags->pluck('id');
     }
 }

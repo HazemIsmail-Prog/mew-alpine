@@ -9,31 +9,14 @@
         <div class="flex flex-col p-3 gap-3 border border-primary border-dashed rounded-lg">
             <h1 class="text-primary font-extrabold">{{ __('Record Details') }}</h1>
 
-            <x-searchable-dropdown 
-                id="form.contract_ids" 
-                label="{{__('Contract')}}" 
-                :list="$contracts" 
-                :multiple="true" 
-                model="form.contract_ids"
-                />
-                
-                <x-searchable-dropdown 
-                id="form.stakeholder_id" 
-                label="{{__('Stakeholder')}}" 
-                :list="$stakeholders" 
-                :multiple="false" 
-                model="form.stakeholder_id"
-            />
+            <x-dropdown-test id="form.contract_ids" label="{{ __('Contract') }}" :list="$contracts" :multiple="true"
+                model="form.contract_ids" selected-items="form.contract_ids" />
 
-            <x-searchable-dropdown 
-                id="form.role" 
-                label="{{__('Role')}}" 
-                :list="$roles" 
-                :multiple="false" 
-                model="form.role"
-            />
+            <x-dropdown-test id="form.stakeholder_id" label="{{ __('Stakeholder') }}" :list="$stakeholders"
+                :multiple="false" model="form.stakeholder_id" selected-items="form.stakeholder_id" />
 
-
+            <x-dropdown-test id="form.role" label="{{ __('Role') }}" :list="$roles" :multiple="false"
+                model="form.role" selected-items="form.role" />
 
             <div>
                 <x-input-label for="name" :value="__('Name')" />

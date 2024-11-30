@@ -78,11 +78,6 @@ class DocumentController extends Controller
         $filters = $request->query('filters');
         $documents = Document::query()
             ->whereIn('contract_id', $request->user()->contracts()->pluck('id'))
-            ->with('tags:id')
-            ->with('users:id')
-            ->with('uncompletedSteps', function ($q) {
-                $q->orderBy('order', 'asc');
-            })
             ->when(isset($filters['search']), function (Builder $q) use ($filters) {
                 $q->where(function (Builder $q) use ($filters) {
                     $q->whereAny(
@@ -147,9 +142,6 @@ class DocumentController extends Controller
     {
         $currentDocument = Document::query()
             ->where('id', $document->id)
-            ->with('uncompletedSteps', function ($q) {
-                $q->orderBy('order', 'asc');
-            })
             ->first();
         return new DocumentResource($currentDocument);
     }
@@ -161,8 +153,8 @@ class DocumentController extends Controller
         }
         $request->validate([
             'contract_id' => 'required',
-            'from_id' => 'required',
-            'to_id' => 'required',
+            'from_id' => 'required_without:to_id|nullable',
+            'to_id' => 'required_without:from_id|nullable',
             'type' => 'required',
             'title' => 'required',
             'is_completed' => 'required|boolean',
@@ -172,7 +164,7 @@ class DocumentController extends Controller
             'follow_ids' => 'nullable|array',
             'tag_ids' => 'nullable|array',
         ]);
-        $document = Document::create($request->except('follow_ids', 'tag_ids'));
+        $document = Document::create($request->except('follow_ids', 'tag_ids', 'can_update', 'can_delete'));
         $document->users()->sync($request->follow_ids);
         $document->tags()->sync($request->tag_ids);
         return new DocumentResource($document);
@@ -197,7 +189,7 @@ class DocumentController extends Controller
             'tag_ids' => 'nullable|array',
         ]);
 
-        $document->update($request->except('follow_ids', 'tag_ids', 'is_completed'));
+        $document->update($request->except('follow_ids', 'tag_ids', 'is_completed', 'can_update', 'can_delete'));
         $document->users()->sync($request->follow_ids);
         $document->tags()->sync($request->tag_ids);
         return new DocumentResource($document);

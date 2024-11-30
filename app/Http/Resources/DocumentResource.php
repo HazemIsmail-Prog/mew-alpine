@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use App\Policies\DocumentPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class DocumentResource extends JsonResource
 {
@@ -29,9 +28,9 @@ class DocumentResource extends JsonResource
             'ref' => $this->ref,
             'content' => $this->content,
             'notes' => $this->notes,
-            'follow_ids' => $this->users->pluck('id'),
-            'tag_ids' => $this->tags->pluck('id'),
-            'uncompleted_steps' => $this->uncompletedSteps,
+            'follow_ids' => $this->users()->pluck('id'),
+            'tag_ids' => $this->tags()->pluck('id'),
+            'uncompleted_steps' => $this->uncompletedSteps()->orderBy('order', 'asc')->get(),
             'can_delete' => ($policy->before($user, 'delete')) ?? $policy->delete($user, $this->resource),
             'can_update' => ($policy->before($user, 'update')) ?? $policy->update($user, $this->resource),
         ];
