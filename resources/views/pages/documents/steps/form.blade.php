@@ -9,7 +9,7 @@
         <div class="flex items-center gap-2 flex-wrap">
             <template x-for="word in mostUsedWords" :key="word">
                 <span x-on:click="appendWord(word)"
-                    class=" cursor-pointer bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300"
+                    class=" cursor-pointer bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded"
                     x-text="word"></span>
             </template>
         </div>

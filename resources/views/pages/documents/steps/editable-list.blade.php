@@ -6,7 +6,7 @@
                 @can('updateSteps', App\Models\Document::class)
                     <input x-model="step.is_completed" x-on:change="toggleStepCompleted(step)"
                         x-bind:checked="step.is_completed" type="checkbox" value=""
-                        class="w-4 h-4 text-primary bg-primary bg-opacity-5 border-primary rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        class="w-4 h-4 text-primary bg-primary bg-opacity-5 border-primary rounded focus:ring-primary focus:ring-2">
                     <template x-if="step.isEditing">
                         <textarea class="w-full focus:outline-none focus:ring-0 border-none outline-none" x-trap="step.isEditing"
                             x-on:keydown.ctrl.enter.prevent="confirmEditStep(step)" x-on:keydown.esc.prevent="cancelEditStep(step)"
@@ -15,7 +15,7 @@
                 @endcan
                 @can('viewSteps', App\Models\Document::class)
                     <template x-if="!step.isEditing">
-                        <label class="text-sm  dark:text-gray-300 whitespace-pre-line"
+                        <label class="text-sm whitespace-pre-line"
                             x-bind:class="step.is_completed ? 'text-gray-900' : 'text-red-500'"
                             x-html="step.action"></label>
                     </template>

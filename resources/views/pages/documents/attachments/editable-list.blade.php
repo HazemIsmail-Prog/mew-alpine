@@ -8,7 +8,7 @@
                     <div class="flex-1 flex items-center gap-2">
                         @can('viewAttachments', App\Models\Document::class)
                             <a x-show="!attachment.isEditing"
-                                class="text-sm text-gray-900 dark:text-gray-300 whitespace-pre-line"
+                                class="text-sm text-gray-900 whitespace-pre-line"
                                 x-html="attachment.description" target="__blank" x-bind:href="attachment.file_path"></a>
                         @endcan
                         @can('updateAttachments', App\Models\Document::class)
