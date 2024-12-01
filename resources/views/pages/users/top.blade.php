@@ -8,7 +8,7 @@
         {{ __('Reset Filters') }}
     </button>
 
-    <button x-on:click="openModal" type="button"
+    <button x-on:click="openModal()" type="button"
         class="flex items-center justify-center gap-1 h-9 py-1 w-28 rounded-lg text-white font-bold !bg-danger px-4">
         {{ __('New') }}
     </button>

@@ -7,17 +7,6 @@
     selectedItems: {{ $selectedItems }},
     list: @js($list),
     init() {
-        // Watch for changes to selectedItems
-        this.$watch('selectedItems', value => {
-            if (value === undefined) {
-                this.selectedItems = this.multiple ? [] : null; // Initialize properly
-            }
-        });
-
-        // Handle case where selectedItems starts undefined
-        if (typeof this.selectedItems === 'undefined') {
-            this.selectedItems = this.multiple ? [] : null;
-        };
         this.$watch('expanded', value => {
             if (value) {
                 this.updateListWidth();
