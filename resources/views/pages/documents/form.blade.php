@@ -1,6 +1,6 @@
 <div class="flex flex-col p-3 gap-3 border border-primary border-dashed rounded-lg">
     <h1 class="text-primary font-extrabold">{{ __('Document Details') }}</h1>
-    <div>
+    <div class=" flex flex-col gap-2">
 
         <x-dropdown-test id="form.contract_id" label="{{ __('Contract') }}" :list="$contracts" :multiple="false"
             model="form.contract_id" selected-items="form.contract_id" />

@@ -1,9 +1,15 @@
 <template x-if="steps.length && !fetchingSteps">
-    <template x-for="step in steps" :key="step.id">
+    <template x-for="(step, index) in steps" :key="step.id">
         {{-- Step Row --}}
-        <div class="py-1 border-b border-primary border-dashed">
-            <label class="text-sm whitespace-pre-line"
-                x-bind:class="step.is_completed ? 'text-gray-900' : 'text-red-500'" x-html="step.action"></label>
+        <div 
+            class="py-1"
+            x-bind:class="{
+                'border-b border-primary border-dashed': index !== steps.length - 1,
+                'text-gray-900': step.is_completed,
+                'text-red-500': !step.is_completed,
+            }"
+        >
+            <p class="text-sm whitespace-pre-line" x-html="step.action"></p>
         </div>
     </template>
 </template>
