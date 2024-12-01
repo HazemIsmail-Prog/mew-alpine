@@ -1,8 +1,7 @@
 {{-- Search and Create New Button --}}
 <div class="flex items-center gap-3 my-3 px-4">
     <input type="text" x-model="filters.search" placeholder="Search by name"
-        class="flex-1 px-4 py-2 rounded-md border border-gray-300 focus:ring-primary focus:border-primary"
-        x-on:input.debounce.500ms="resetPageNumber">
+        class="flex-1 px-4 py-2 rounded-md border border-gray-300 focus:ring-primary focus:border-primary">
 
     <button x-on:click="resetFilters" type="button"
         class="h-9 py-1 px-4 rounded-lg text-primary border-primary border font-bold">

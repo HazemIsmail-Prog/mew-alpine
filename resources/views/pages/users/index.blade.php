@@ -27,86 +27,79 @@
 <script>
     function page() {
         return {
-            // ######################### Variables
             route: 'users',
             contracts: @json($contracts),
             stakeholders: @json($stakeholders),
             roles: @json($roles),
-            defaultFilters: {
-                search: '',
+            filters: {
+                search: ''
             },
-            
-            fillForm(record) {          
-                this.form = {
-                    id: record?.id ?? null,
-                    name: record?.name ?? '',
-                    username: record?.username ?? '',
-                    password: record?.password ?? '',
-                    contract_ids: record?.contract_ids ?? [],
-                    stakeholder_id: record?.stakeholder_id ?? null,
-                    role: record?.role ?? 'user',
-                    is_active: record?.is_active ?? true
-                };
-            },
-            // ######################### Variables
-            
             showModal: false,
-            filters: {},
             records: [],
             form: [],
             currentPage: 1,
             totalPages: 1,
+            totalResults: 0,
+            loading: false,
 
             init() {
-                this.filters = {
-                    ...this.defaultFilters
-                };
                 this.fetchRecords();
+                this.$watch(() => JSON.stringify(this.filters), () => {
+                    this.resetPageNumber();
+                });
+            },
+
+            resetFilters() {
+                Object.keys(this.filters).forEach(key => this.filters[key] = []);
+                this.fetchRecords(); // Reload records after resetting filters
+            },
+
+            fillForm(record) {
+                this.form = record ? {
+                    ...record
+                } : this.getEmptyForm();
+            },
+
+            getEmptyForm() {
+                return {
+                    id: null,
+                    name: '',
+                    username: '',
+                    password: '',
+                    contract_ids: [],
+                    stakeholder_id: null,
+                    role: 'user',
+                    is_active: true
+                };
             },
 
             fetchRecords(page = 1) {
+                if (this.loading) return;
+                this.loading = true;
                 axios.get(`/${this.route}/getData`, {
                         params: {
-                            page: page,
-                            filters: this.filters,
+                            page,
+                            filters: this.filters
                         }
                     })
                     .then((response) => {
                         const data = response.data;
-                        if (page === 1) {
-                            this.records = data.data;
-                        } else {
-                            this.records = [...this.records, ...data.data];
-                        }
-                        this.currentPage = data.current_page;
-                        this.totalPages = data.last_page;
+                        this.records = page === 1 ? data.data : [...this.records, ...data.data];
+                        this.currentPage = data.meta.current_page;
+                        this.totalPages = data.meta.last_page;
+                        this.totalResults = data.meta.total;
                     })
-                    .catch((error) => {
-                        alert(error.response.data.message);
-                    });
-            },
-
-            resetFilters() {
-                this.filters = {
-                    ...this.defaultFilters
-                };
-                this.resetPageNumber();
-            },
-
-            resetPageNumber() {
-                this.currentPage = 1;
-                this.fetchRecords();
+                    .catch((error) => console.error(error.response?.data?.message || error.message))
+                    .finally(() => this.loading = false);
             },
 
             openModal(record = null) {
-                const isSameRecord = record?.id === this.form.id;
-                this.showModal = isSameRecord ? !this.showModal : true;
-                record = isSameRecord ? null : record;
+                this.showModal = true;
                 this.fillForm(record);
             },
 
-            closeModal(){
-                this.openModal(null); // this line to clear selected record before hiding the modal
+            closeModal() {
+                this.fillForm(this.getEmptyForm());
                 this.showModal = false;
             },
 
@@ -114,47 +107,34 @@
                 const url = this.form.id ? `/${this.route}/${this.form.id}` : `/${this.route}`;
                 const method = this.form.id ? 'put' : 'post';
                 axios({
-                        method: method,
-                        url: url,
+                        method,
+                        url,
                         data: this.form
                     })
-                    .then((response) => {
-                        const data = response.data;
-                        if (this.form.id) {
-                            // Update the record in the records list
-                            const index = this.records.findIndex(record => record.id === data.id);
-                            if (index !== -1) {
-                                this.records.splice(index, 1, data);
-                            }
-                        } else {
-                            // Add the new record to the records list
-                            this.resetFilters();
-                            this.records.unshift(data);
-                            this.openModal(data);
-                        }
+                    .then((response) => {                        
+                        this.fetchRecords(); // Refresh records
+                        this.openModal(response.data.data)
                     })
                     .catch((error) => {
-                        alert(error.response.data.message);
+                        console.error(error.response?.data?.message || error.message);
+                        alert('Failed to save record. Please check your input.');
                     });
             },
 
-            deleteRecord(record) {
-                if (!confirm('Are you sure you want to delete this record?'))
-                    return;
-                axios.delete(`/${this.route}/${record.id}`)
-                    .then(() => {
-                        this.showModal = false;
-                        this.fetchRecords()
-                    })
-                    .catch((error) => {
-                        alert(error.response.data.message);
-                    });
+            loadMore() {
+                if (this.currentPage >= this.totalPages || this.loading) return;
+                this.fetchRecords(this.currentPage + 1);
             },
 
+            resetPageNumber() {
+                this.currentPage = 1;
+                this.fetchRecords();
+            },
             toggleRecordIsActive(record, isActive) {
                 axios.put(`/${this.route}/${record.id}/toggle-active`, {
                         is_active: isActive
-                    }).then((response) => {
+                    })
+                    .then((response) => {
                         const data = response.data;
                         // Update the record in the records list
                         const index = this.records.findIndex(r => r.id === record.id);
@@ -163,15 +143,25 @@
                         }
                     })
                     .catch((error) => {
-                        alert(error.response.data.message);
+                        console.error(error.response?.data?.message || error.message);
+                        alert('Failed to update active status.');
                     });
             },
 
-            loadMore() {
-                if (this.currentPage < this.totalPages) {
-                    this.fetchRecords(this.currentPage + 1);
-                }
-            }
-        }
+            deleteRecord(record) {
+                if (!confirm('Are you sure you want to delete this record?')) return;
+
+                axios.delete(`/${this.route}/${record.id}`)
+                    .then(() => {
+                        // Remove the record from the list
+                        this.records = this.records.filter(r => r.id !== record.id);
+                        this.totalResults -= 1; // Update total results
+                    })
+                    .catch(error => {
+                        console.error(error.response?.data?.message || error.message);
+                        alert('Failed to delete the record.');
+                    });
+            },
+        };
     }
 </script>

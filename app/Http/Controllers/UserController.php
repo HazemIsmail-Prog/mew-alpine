@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\Contract;
 use App\Models\Stakeholder;
 use App\Models\User;
@@ -46,13 +47,13 @@ class UserController extends Controller
         }
         $filters = $request->query('filters');
         $users = User::query()
-            ->with('contracts:id')
-            ->when($filters['search'], function (Builder $q) use ($filters) {
+            ->when(isset($filters['search']), function (Builder $q) use ($filters) {
                 $q->where('name', 'like', "%" . $filters['search'] . "%");
             })
             ->latest()
             ->paginate(10);
-        return response()->json($users);
+
+        return UserResource::collection($users);
     }
 
     public function store(Request $request)
@@ -60,6 +61,8 @@ class UserController extends Controller
         if (Auth::user()->cannot('create', User::class)) {
             abort(403, 'Unauthorized action.');
         }
+
+        // dd($request->all());
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255',
@@ -68,9 +71,10 @@ class UserController extends Controller
             'stakeholder_id' => 'required',
             'role' => 'required',
         ]);
-        $user = User::create($request->except('contract_ids'));
+        $user = User::create($request->except('contract_ids','isTrusted'));
         $user->contracts()->sync($request->contract_ids);
-        return response()->json($user, 201);
+        return new UserResource($user);
+
     }
 
     public function update(Request $request, User $user)
@@ -92,7 +96,7 @@ class UserController extends Controller
             $user->save();
         }
         $user->contracts()->sync($request->contract_ids);
-        return response()->json($user);
+        return new UserResource($user);
     }
 
     public function destroy(User $user)
