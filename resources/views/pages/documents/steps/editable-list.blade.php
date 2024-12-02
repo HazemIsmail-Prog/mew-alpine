@@ -23,7 +23,7 @@
             </div>
             <div class="flex items-center gap-1">
                 @can('updateSteps', App\Models\Document::class)
-                    <x-svg.arrows-up-down x-sort:handle class=" size-4" />
+                    <x-svg.arrows-up-down x-sort:handle x-show="!step.isDeleting && !step.isEditing" class=" size-4" />
                     <template x-if="!step.isDeleting && !step.isEditing">
                         <x-svg.edit x-on:click="editStep(step)" class=" text-primary size-4" />
                     </template>
