@@ -1,4 +1,4 @@
-<div x-sort.ghost="handle">
+<div x-sort:config="{ handle: '[x-sort\\:handle]' }" x-sort.ghost="handle">
     <template x-for="step in steps" :key="step.id">
         {{-- Step Row --}}
         <div x-sort:item="step.id" class="flex items-center gap-2 py-1 border-b border-primary border-dashed">
@@ -23,6 +23,7 @@
             </div>
             <div class="flex items-center gap-1">
                 @can('updateSteps', App\Models\Document::class)
+                    <x-svg.arrows-up-down x-sort:handle class=" size-4" />
                     <template x-if="!step.isDeleting && !step.isEditing">
                         <x-svg.edit x-on:click="editStep(step)" class=" text-primary size-4" />
                     </template>
