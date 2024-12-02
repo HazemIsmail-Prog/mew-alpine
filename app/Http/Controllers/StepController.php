@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Document;
 use App\Models\Step;
-use Illuminate\Console\View\Components\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,12 +15,25 @@ class StepController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
+        // Check if there are any steps with an 'order' of 0 and get them ordered by 'id'
+        $stepsWithZeroOrders = $document->steps()->where('order', 0)->orderBy('id', 'asc')->get();
+
+        if ($stepsWithZeroOrders->isNotEmpty()) {
+            // Set 'order' field in sequence (1, 2, 3, ...)
+            foreach ($stepsWithZeroOrders as $index => $step) {
+                $step->order = $index + 1;
+                $step->save();
+            }
+        }
+
+        // Get steps ordered by 'order'
         $steps = $document->steps()
             ->orderBy('order', 'asc')
-            ->orderBy('id', 'asc')
             ->get();
+
         return response()->json($steps);
     }
+
 
     public function store(Request $request, Document $document)
     {
