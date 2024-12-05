@@ -43,6 +43,9 @@
             loading: false,
 
             init() {
+                axios.defaults.headers.common["X-CSRF-TOKEN"] = document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content");
                 this.fetchRecords();
                 this.$watch(() => JSON.stringify(this.filters), () => {
                     this.resetPageNumber();

@@ -1,6 +1,5 @@
 <x-app-layout>
     <div x-data="page()" x-on:steps-updated="fetchRecord($event.detail.documentId)" class="flex h-full">
-
         {{-- List --}}
         <div class="flex-1 mx-auto overflow-auto">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -71,6 +70,9 @@
             totalResults: 0,
 
             init() {
+                axios.defaults.headers.common["X-CSRF-TOKEN"] = document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content");
                 this.$watch('filters', value => {
                     if (value) {
                         this.fetchRecords();
