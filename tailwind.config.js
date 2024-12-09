@@ -14,6 +14,10 @@ export default {
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
                 cairo: ['Cairo', ...defaultTheme.fontFamily.sans], // Replace default sans-serif font
+                sultann: ['"Sultan Normal"', 'sans-serif'], // Add the custom font
+                sultanb: ['"Sultan bold"', 'sans-serif'], // Add the custom font
+
+
 
             },
             colors: {

@@ -49,7 +49,10 @@ new class extends Component {
                         <x-nav-link :href="route('documents.index')" :active="request()->routeIs('documents.index')">
                             {{ __('Documents') }}
                         </x-nav-link>
-                    @endcan
+                        @endcan
+                        <x-nav-link :href="route('document-generator.index')" :active="request()->routeIs('document-generator.index')">
+                            {{ __('Document Generator') }}
+                        </x-nav-link>
 
                 </div>
             </div>
