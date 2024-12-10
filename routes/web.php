@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(DocumentController::class)->group(function () {
         Route::get('/documents/getData', 'getData');
-        Route::put('/documents/{document}/toggle-completed', 'toggleCompleted');
+        // Route::put('/documents/{document}/toggle-completed', 'toggleCompleted');
     });
     Route::apiResource('/documents', DocumentController::class);
 

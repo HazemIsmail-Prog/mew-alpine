@@ -200,25 +200,25 @@
                     });
             },
 
-            toggleRecordIsCompleted(record, isCompleted) {
-                axios.put(`/${this.route}/${record.id}/toggle-completed`, {
-                        is_completed: isCompleted
-                    })
-                    .then((response) => {
-                        const data = response.data.data;
-                        if (this.filters.statuses.length) {
-                            this.fetchRecords()
-                        } else {
-                            const index = this.records.findIndex(r => r.id === record.id);
-                            if (index !== -1) {
-                                this.records.splice(index, 1, data);
-                            }
-                        }
-                    })
-                    .catch((error) => {
-                        alert(error.response.data.message);
-                    });
-            },
+            // toggleRecordIsCompleted(record, isCompleted) {
+            //     axios.put(`/${this.route}/${record.id}/toggle-completed`, {
+            //             is_completed: isCompleted
+            //         })
+            //         .then((response) => {
+            //             const data = response.data.data;
+            //             if (this.filters.statuses.length) {
+            //                 this.fetchRecords()
+            //             } else {
+            //                 const index = this.records.findIndex(r => r.id === record.id);
+            //                 if (index !== -1) {
+            //                     this.records.splice(index, 1, data);
+            //                 }
+            //             }
+            //         })
+            //         .catch((error) => {
+            //             alert(error.response.data.message);
+            //         });
+            // },
 
             getName(type, id) {
 

@@ -77,6 +77,7 @@ class DocumentController extends Controller
 
         $filters = $request->query('filters');
         $documents = Document::query()
+        
             ->whereIn('contract_id', $request->user()->contracts()->pluck('id'))
             ->when(isset($filters['search']), function (Builder $q) use ($filters) {
                 $q->where(function (Builder $q) use ($filters) {
@@ -124,10 +125,10 @@ class DocumentController extends Controller
             ->when(isset($filters['statuses']), function (Builder $q) use ($filters) {
                 $q->where(function (Builder $q) use ($filters) {
                     if (in_array('completed', $filters['statuses'])) {
-                        $q->orWhere('is_completed', true);
+                        $q->orDoesntHave('uncompletedSteps');
                     }
                     if (in_array('pending', $filters['statuses'])) {
-                        $q->orWhere('is_completed', false);
+                        $q->orHas('uncompletedSteps');
                     }
                 });
             })
@@ -204,13 +205,13 @@ class DocumentController extends Controller
         return response()->json(['message' => 'Document deleted successfully']);
     }
 
-    public function toggleCompleted(Request $request, Document $document)
-    {
-        if (Auth::user()->cannot('update', $document)) {
-            abort(403, 'Unauthorized action.');
-        }
-        $document->is_completed = $request->input('is_completed');
-        $document->save();
-        return new DocumentResource($document);
-    }
+    // public function toggleCompleted(Request $request, Document $document)
+    // {
+    //     if (Auth::user()->cannot('update', $document)) {
+    //         abort(403, 'Unauthorized action.');
+    //     }
+    //     $document->is_completed = $request->input('is_completed');
+    //     $document->save();
+    //     return new DocumentResource($document);
+    // }
 }

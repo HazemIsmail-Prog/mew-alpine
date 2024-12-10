@@ -1,6 +1,6 @@
 <div class="flex items-center gap-3 w-full lg:w-3/5 " x-bind:class="{ 'self-end': record.type == 'incoming' }">
 
-    <template x-if="record.can_update">
+    {{-- <template x-if="record.can_update">
         <div>
             <label x-on:change="toggleRecordIsCompleted(record, $event.target.checked)"
                 class="inline-flex items-center cursor-pointer">
@@ -10,7 +10,7 @@
                 </div>
             </label>
         </div>
-    </template>
+    </template> --}}
 
     <div x-on:click="openModal(record)"
         x-bind:class="['flex-1 flex flex-col md:flex-row items-center justify-between gap-2 cursor-pointer border rounded-lg p-2',
