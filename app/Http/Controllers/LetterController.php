@@ -6,6 +6,7 @@ use App\Http\Resources\LetterResource;
 use App\Models\Letter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Facades\Pdf;
 
 
@@ -21,7 +22,7 @@ class LetterController extends Controller
 
         $filters = $request->query('filters');
         $letters = Letter::query()
-        
+
             ->where('user_id', $request->user()->id)
             ->when(isset($filters['search']), function (Builder $q) use ($filters) {
                 $q->where(function (Builder $q) use ($filters) {
@@ -88,13 +89,30 @@ class LetterController extends Controller
         return response()->json(['message' => 'Letter deleted successfully']);
     }
 
-    public function originalPDF(Letter $letter) {
+    public function originalPDF(Letter $letter)
+    {
+        // return Pdf::view('pages.letters.original-pdf', ['letter' => $letter])
+        //     ->format('a4')
+        //     ->name('your-invoice.pdf');
+
+
         return Pdf::view('pages.letters.original-pdf', ['letter' => $letter])
+            ->withBrowsershot(function (Browsershot $browsershot) {
+                return $browsershot
+                    // Target the whole dir as both node and NPM are there located
+                    ->setIncludePath('~/.nvm/versions/node/v20.11.1/bin')
+
+                    // Or both by hand if they are in different folders
+                    // ->setNodeBinary('~/.nvm/versions/node/v20.11.1/bin/node')
+                    // ->setNpmBinary('~/.nvm/versions/node/v20.11.1/bin/npm')
+                ;
+            })
             ->format('a4')
             ->name('your-invoice.pdf');
     }
 
-    public function normalPDF(Letter $letter) {
+    public function normalPDF(Letter $letter)
+    {
         return Pdf::view('pages.letters.normal-pdf', ['letter' => $letter])
             ->format('a4')
             ->name('your-invoice.pdf');
