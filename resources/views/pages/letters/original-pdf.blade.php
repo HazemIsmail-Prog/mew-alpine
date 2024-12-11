@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Letter No. {{$letter->id}}</title>
     <style>
-        @font-face {
+        /* @font-face {
             font-family: 'Sultan Normal';
             src: url('fonts/SultanNormal.ttf') format('truetype');
             font-weight: normal;
@@ -28,7 +28,7 @@
 
         .font-sultann {
             font-family: "Sultan Normal", sans-serif;
-        }
+        } */
 
 
 

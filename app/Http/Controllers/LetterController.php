@@ -7,8 +7,11 @@ use App\Models\Letter;
 use App\Services\PdfWrapper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Spatie\LaravelPdf\Facades\Pdf;
+// use Spatie\LaravelPdf\Facades\Pdf;
 use Spatie\Browsershot\Browsershot;
+
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 
 
@@ -94,12 +97,18 @@ class LetterController extends Controller
 
     public function originalPDF(Letter $letter)
     {
-        $pdf = (new PdfWrapper())
-            ->loadView('pages.letters.original-pdf', [
-                'letter' => $letter
-            ]);
+     
+        $pdf = Pdf::loadView('pages.letters.original-pdf', ['letter' => $letter]);
+     
+        return $pdf->stream();
 
-        return $pdf->stream('xfhfd');
+
+        // $pdf = (new PdfWrapper())
+        //     ->loadView('pages.letters.original-pdf', [
+        //         'letter' => $letter
+        //     ]);
+
+        // return $pdf->stream('xfhfd');
 
 
         // return Pdf::view('pages.letters.original-pdf', ['letter' => $letter])
