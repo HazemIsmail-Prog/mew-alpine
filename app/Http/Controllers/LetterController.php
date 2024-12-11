@@ -101,10 +101,11 @@ class LetterController extends Controller
                 return $browsershot
                     // Target the whole dir as both node and NPM are there located
                     // ->setIncludePath('~/.nvm/versions/node/v16.20.2/bin')
+                    ->setIncludePath('$PATH:/usr/local/bin')
 
                     // Or both by hand if they are in different folders
-                    ->setNodeBinary('/usr/local/bin/node')
-                    ->setNpmBinary('/usr/local/bin/npm');
+                    // ->setNodeBinary('/usr/local/bin/node')
+                    // ->setNpmBinary('/usr/local/bin/npm');
                 ;
             })
             ->format('a4')
