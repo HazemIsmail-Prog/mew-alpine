@@ -3,7 +3,7 @@
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\DocumentGeneratorController;
+use App\Http\Controllers\LetterController;
 use App\Http\Controllers\StakeholderController;
 use App\Http\Controllers\StepController;
 use App\Http\Controllers\TagController;
@@ -50,14 +50,19 @@ Route::middleware('auth')->group(function () {
     });
     Route::apiResource('/documents', DocumentController::class);
 
+    Route::controller(LetterController::class)->group(function () {
+        Route::get('/letters/getData', 'getData');
+        Route::get('letters/{letter}/original-pdf','originalPDF');
+        Route::get('letters/{letter}/normal-pdf','normalPDF');
+    });
+    Route::apiResource('/letters', LetterController::class);
+
     Route::apiResource('/documents/{document}/steps', StepController::class)->except('show');
     Route::put('/documents/{document}/steps/{step}/toggle-completed', [StepController::class, 'toggleCompleted']);
     Route::post('/documents/{document}/steps/reorder', [StepController::class, 'reorderSteps']);
 
     Route::apiResource('/documents/{document}/attachments', AttachmentController::class)->except('show');
 
-    Route::get('document-generator',[DocumentGeneratorController::class,'index'])->name('document-generator.index');
-    Route::get('document-generator-pdf',[DocumentGeneratorController::class,'generateDocument'])->name('document-generator.pdf');
 });
 
 

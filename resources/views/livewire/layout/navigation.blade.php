@@ -50,8 +50,8 @@ new class extends Component {
                             {{ __('Documents') }}
                         </x-nav-link>
                         @endcan
-                        <x-nav-link :href="route('document-generator.index')" :active="request()->routeIs('document-generator.index')">
-                            {{ __('Document Generator') }}
+                        <x-nav-link :href="route('letters.index')" :active="request()->routeIs('letters.index')">
+                            {{ __('Letters') }}
                         </x-nav-link>
 
                 </div>
