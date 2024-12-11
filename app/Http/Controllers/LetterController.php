@@ -96,6 +96,8 @@ class LetterController extends Controller
             ->withBrowsershot(function (Browsershot $browserShot) {
                 $browserShot->setNodeBinary('~/.nvm/versions/node/v16.20.2/bin/node');
                 $browserShot->setNpmBinary('~/.nvm/versions/node/v16.20.2/bin/npm');
+                $browserShot->noSandbox();
+
             })
             ->format('a4')
             ->name('your-invoice.pdf');
