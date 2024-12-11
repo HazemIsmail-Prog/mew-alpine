@@ -34,5 +34,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    
+    'browsershort' => [
+        'include_path' => '$PATH:'.env('BROWSERSHOT_INCLUDE_PATH'),
+    ]
 
 ];
