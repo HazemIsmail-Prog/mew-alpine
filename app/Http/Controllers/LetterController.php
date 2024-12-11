@@ -94,20 +94,20 @@ class LetterController extends Controller
 
     public function originalPDF(Letter $letter)
     {
-        // $pdf = (new PdfWrapper())
-        //     ->loadView('pages.letters.original-pdf', [
-        //         'letter' => $letter
-        //     ]);
+        $pdf = (new PdfWrapper())
+            ->loadView('pages.letters.original-pdf', [
+                'letter' => $letter
+            ]);
 
-        // return $pdf->stream('xfhfd');
+        return $pdf->stream('xfhfd');
 
 
-        return Pdf::view('pages.letters.original-pdf', ['letter' => $letter])
-            ->withBrowsershot(function (Browsershot $browserShot) {
-                $browserShot->setIncludePath(config('services.browsershort.include_path'));
-            })
-            ->format('a4')
-            ->name('your-invoice.pdf');
+        // return Pdf::view('pages.letters.original-pdf', ['letter' => $letter])
+        //     ->withBrowsershot(function (Browsershot $browserShot) {
+        //         $browserShot->setIncludePath(config('services.browsershort.include_path'));
+        //     })
+        //     ->format('a4')
+        //     ->name('your-invoice.pdf');
     }
 
     public function normalPDF(Letter $letter)
