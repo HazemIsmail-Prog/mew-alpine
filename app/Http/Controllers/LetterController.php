@@ -103,8 +103,8 @@ class LetterController extends Controller
                     // ->setIncludePath('~/.nvm/versions/node/v16.20.2/bin')
 
                     // Or both by hand if they are in different folders
-                    ->setNodeBinary('~/.nvm/versions/node/v16.20.2/bin/node')
-                    ->setNpmBinary('~/.nvm/versions/node/v16.20.2/bin/npm')
+                    ->setNodeBinary('/usr/local/bin/node')
+                    ->setNpmBinary('/usr/local/bin/npm');
                 ;
             })
             ->format('a4')
