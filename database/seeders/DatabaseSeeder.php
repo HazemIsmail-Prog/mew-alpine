@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             // DocumentSeeder::class,
             // StepSeeder::class,
             // AttachmentSeeder::class,
-            TagSeeder::class,
+            // TagSeeder::class,
         ]);
 
         User::factory()->create([

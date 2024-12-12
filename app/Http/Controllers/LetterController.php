@@ -4,17 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\LetterResource;
 use App\Models\Letter;
-use App\Services\PdfWrapper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-// use Spatie\LaravelPdf\Facades\Pdf;
 use Spatie\Browsershot\Browsershot;
-
-use Barryvdh\DomPDF\Facade\Pdf;
-
-
-
-
+use Spatie\LaravelPdf\Facades\Pdf;
 
 class LetterController extends Controller
 {
@@ -97,26 +90,14 @@ class LetterController extends Controller
 
     public function originalPDF(Letter $letter)
     {
-     
-        $pdf = Pdf::loadView('pages.letters.original-pdf', ['letter' => $letter]);
-     
-        return $pdf->stream();
 
 
-        // $pdf = (new PdfWrapper())
-        //     ->loadView('pages.letters.original-pdf', [
-        //         'letter' => $letter
-        //     ]);
-
-        // return $pdf->stream('xfhfd');
-
-
-        // return Pdf::view('pages.letters.original-pdf', ['letter' => $letter])
-        //     ->withBrowsershot(function (Browsershot $browserShot) {
-        //         $browserShot->setIncludePath(config('services.browsershort.include_path'));
-        //     })
-        //     ->format('a4')
-        //     ->name('your-invoice.pdf');
+        return Pdf::view('pages.letters.original-pdf', ['letter' => $letter])
+            ->withBrowsershot(function (Browsershot $browserShot) {
+                $browserShot->setIncludePath('$PATH:'.config('services.browsershort.include_path'));
+            })
+            ->format('a4')
+            ->name('your-invoice.pdf');
     }
 
     public function normalPDF(Letter $letter)
