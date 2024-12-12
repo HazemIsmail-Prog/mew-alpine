@@ -94,7 +94,7 @@ class LetterController extends Controller
 
         return Pdf::view('pages.letters.original-pdf', ['letter' => $letter])
             ->withBrowsershot(function (Browsershot $browserShot) {
-                $browserShot->setIncludePath('$PATH:'.config('services.browsershort.include_path'));
+                $browserShot->setIncludePath(config('services.browsershort.include_path'));
             })
             ->format('a4')
             ->name('your-invoice.pdf');
