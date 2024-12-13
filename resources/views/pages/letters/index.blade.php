@@ -27,11 +27,9 @@
                         <x-svg.print x-ref="button" class="text-primary size-6" />
                         <div x-anchor="$refs.button" x-show="show"
                             class=" flex flex-col z-10 bg-white shadow-md rounded-lg overflow-clip">
-                            <a target="__blank"
-                                x-bind:href="`letters/${record.id}/normal-pdf`"
+                            <a target="__blank" x-bind:href="`letters/${record.id}/normal-pdf`"
                                 class=" text-center py-2 px-4 hover:bg-primary hover:text-white">{{ __('Normal') }}</a>
-                            <a target="__blank"
-                                x-bind:href="`letters/${record.id}/original-pdf`"
+                            <a target="__blank" x-bind:href="`letters/${record.id}/original-pdf`"
                                 class=" text-center py-2 px-4 hover:bg-primary hover:text-white">{{ __('Original') }}</a>
                         </div>
                     </div>
@@ -76,56 +74,55 @@
             <textarea placeholder="Copy to" x-model="form.copyTo" rows="5" class="border p-2 rounded"></textarea>
 
 
-            <x-primary-button x-on:click="submitRecord" class=" text-center justify-center">{{__('Save')}}</x-primary-button>
-
-            {{-- <a class="border p-2 rounded bg-blue-500 text-white" target="__blank"
-                href="{{ route('document-generator.pdf') }}">Download PDF</a> --}}
+            <x-primary-button x-on:click="submitRecord"
+                class=" text-center justify-center">{{ __('Save') }}</x-primary-button>
 
         </div>
 
 
         <div x-show="showModal" class="w-1/2 border rounded-lg p-3 overflow-auto">
-            {{-- <div class="mt-3 border rounded overflow-auto" style="height: calc(100% - 60px);"> --}}
-            <div id="previewContent" class="relative flex flex-col justify-between mx-auto bg-white px-16 pt-48 pb-28"
+            <div id="previewContent" class=" flex flex-col mx-auto bg-white pb-20"
                 x-bind:style="'max-width: 210mm; min-height: 296mm; background-image: none;'">
 
-                <div>
+                <div class="mt-48"></div>
+
+                <div class="content-wrapper justify-between mx-20">
                     <p x-show="form.internal" class="text-center text-2xl font-bold mb-2 font-sultann">مذكرة داخلية</p>
 
-                    <div x-show="form.receiver">
-                        <div class=" flex gap-2 font-sultanb text-2xl">
-                            <p x-text='form.prefix'></p>
-                            <p>/</p>
-                            <p x-text='form.receiver'></p>
-                            <p x-text='postfix' class="ms-auto me-10"></p>
-                        </div>
-                        <p x-html="form.address" class=" whitespace-pre-wrap"></p>
-                        <p x-show="form.official" class="font-sultanb text-xl">بالطريق الرسمي</p>
-                        <p class="font-sultanb text-xl">تحية طيبة وبعد،،،</p>
+                    <div x-show="form.receiver" class="flex gap-2 font-sultanb text-2xl">
+                        <p x-text="form.prefix"></p>
+                        <p>/</p>
+                        <p x-text="form.receiver"></p>
+                        <p x-text="suffix" class="ms-auto me-10"></p>
+                    </div>
+                    <p x-show="form.address" x-html="form.address" class="font-sultann text-xl"></p>
+
+                    <p x-show="form.official" class="font-sultanb text-xl">بالطريق الرسمي</p>
+
+                    <p x-show="form.receiver" class="font-sultanb text-xl">تحية طيبة وبعد،،،</p>
+
+                    <div
+                        class="mt-5 pb-3 w-fit max-w-[75%] mx-auto text-center font-sultanb font-bold text-xl border-b border-black">
+                        <span x-html="form.subject" class="whitespace-pre-line"></span>
                     </div>
 
-                    <p x-show="form.subject" x-html="form.subject"
-                        class="mt-5 w-fit max-w-[75%] mx-auto text-center whitespace-pre-wrap font-sultanb font-bold text-xl border-b border-black">
-                    </p>
+                    <div class="mt-5 text-justify  font-sultann text-lg leading-10" style="text-indent: 3rem;">
+                        <span x-html="form.body" class="whitespace-pre-line"></span>
+                    </div>
 
-                    <pre x-show="form.subject" class="mt-5 whitespace-break-spaces text-justify  font-sultann text-lg leading-relaxed"
-                        x-html="form.body"></pre>
+                    <div x-show="form.body" class=" mt-5 font-sultanb text-xl text-center">وتفضلوا بقبول وافر الاحترام والتقدير</div>
 
-                    <p x-show="form.body" class="my-5 font-sultanb text-xl text-center">وتفضلوا بقبول وافر الاحترام
-                        والتقدير
-                    </p>
-
-                    <p x-show="form.body" class="font-sultanb text-2xl w-2/6 text-center ms-auto mb-10"
-                        x-text='form.sender'></p>
+                    <div x-html="form.sender" class=" mt-5 pb-16 font-sultanb text-2xl w-2/6 text-center ms-auto">
+                    </div>
 
                 </div>
 
-
-                <div class=" text-xs font-sultann">
+                <div class="text-xs font-sultann mx-20 mt-auto">
                     <p x-show="form.code">كود ترميز القطاع (15000)</p>
-                    <p x-show="form.has_attachments">المرفقات: كما ورد اعلاه</p>
-                    <p x-show="form.copyTo && !form.cover">نسخة لكل من:</p>
-                    <pre x-show="!form.cover" class="whitespace-pre-wrap ms-3 font-sultann" x-text="form.copyTo"></pre>
+                    <p x-show="form.has_attachments">المرفقات: كما ورد أعلاه</p>
+                    <p x-show="form.copyTo">نسخة لكل من:</p>
+                    <pre x-show="form.copyTo" x-html="form.copyTo" class=" ms-5 font-sultann"></pre>
+                    <pre x-show="form.copyTo" class=" ms-5 font-sultann">الملف - <span x-text="form.id"></span></pre>
                 </div>
 
             </div>
@@ -313,7 +310,7 @@
 
 
 
-                get postfix() {
+                get suffix() {
                     switch (this.form.prefix) {
                         case 'السيد':
                             return 'المحترم'
