@@ -99,6 +99,7 @@
         @if (!$cover)
             <p>نسخة لكل من:</p>
             <pre class=" ms-5 font-sultann">{!! $letter->copyTo !!}</pre>
+            <pre class=" ms-5 font-sultann">الملف - {{ $letter->id }}</pre>
         @endif
     </div>
 
