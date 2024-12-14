@@ -1,7 +1,7 @@
 <x-app-layout>
     <div x-data="documentGenerator()" class="flex h-full p-3 gap-3">
 
-        <div class="w-1/4 flex flex-col gap-3 border rounded-lg p-3 overflow-y-auto">
+        <div class="w-[500px] flex flex-col gap-3 border rounded-lg p-3 overflow-y-auto">
             <input type="text" x-model="filters.search">
 
             <button x-on:click="openModal()"
@@ -42,26 +42,36 @@
         </div>
 
 
-        <div x-show="showModal" class="w-1/4 flex flex-col gap-3 border rounded-lg p-3 overflow-y-auto">
+        <div x-show="showModal" class=" flex-1 flex flex-col gap-3 border rounded-lg p-3 overflow-y-auto">
             <label for="internal">
                 <input id="internal" type="checkbox" x-bind:checked="form.internal" x-model="form.internal">
                 <span>مذكرة داخلية</span>
             </label>
-            <input type="text" placeholder="From" x-model="form.sender" class="border p-2 rounded">
+            <input type="text" placeholder="من" x-model="form.sender" class="border p-2 rounded">
             <div class=" flex w-full gap-1">
                 <select x-model="form.prefix">
                     <option value="السيد">السيد</option>
                     <option value="السادة">السادة</option>
                 </select>
-                <input type="text" placeholder="To" x-model="form.receiver" class="border p-2 rounded flex-1">
+                <input type="text" placeholder="الى" x-model="form.receiver" class="border p-2 rounded flex-1">
             </div>
+            <span x-show="!form.id" x-on:click="toDar"
+                class=" cursor-pointer bg-primary text-white place-self-end text-xs font-medium px-2.5 py-0.5 rounded">الى
+                دار الهندسة</span>
             <label for="official">
                 <input id="official" type="checkbox" x-bind:checked="form.official" x-model="form.official">
                 <span>بالطريق الرسمي</span>
             </label>
             <textarea placeholder="العنوان" x-model="form.address" rows="3"></textarea>
-            <textarea placeholder="subject" x-model="form.subject" rows="5" class="border p-2 rounded"></textarea>
-            <textarea placeholder="Body" id="body" x-model="form.body" rows="10" class="border p-2 rounded"></textarea>
+            <textarea placeholder="الموضوع" x-model="form.subject" rows="5" class="border p-2 rounded"></textarea>
+            <div x-show="!form.id" class=" flex items-center justify-end gap-2">
+                <template x-for="project in projects" :key="project.id">
+                    <span  x-on:click="setSubject(project.id)"
+                    class=" cursor-pointer bg-primary text-white place-self-end text-xs font-medium px-2.5 py-0.5 rounded" x-text="project.name"></span>
+                </template>
+            </div>
+
+            <textarea placeholder="محتوى الكتاب" id="body" x-model="form.body" rows="10" class="border p-2 rounded"></textarea>
             <label for="code">
                 <input id="code" type="checkbox" x-bind:checked="form.code" x-model="form.code">
                 <span>كود ترميز القطاع</span>
@@ -71,7 +81,7 @@
                     x-model="form.has_attachments">
                 <span>مرفقات</span>
             </label>
-            <textarea placeholder="Copy to" x-model="form.copyTo" rows="5" class="border p-2 rounded"></textarea>
+            <textarea placeholder="نسخة لكل من" x-model="form.copyTo" rows="5" class="border p-2 rounded"></textarea>
 
 
             <x-primary-button x-on:click="submitRecord"
@@ -80,7 +90,7 @@
         </div>
 
 
-        <div x-show="showModal" class="w-1/2 border rounded-lg p-3 overflow-auto">
+        <div x-show="showModal" class="min-w-[220mm] border rounded-lg p-3 overflow-auto">
             <div id="previewContent" class=" flex flex-col mx-auto bg-white pb-20 w-[210mm] min-h-[296mm]">
 
                 <div class="mt-48"></div>
@@ -94,7 +104,8 @@
                         <p x-text="form.receiver"></p>
                         <p x-text="suffix" class="ms-auto me-10"></p>
                     </div>
-                    <p x-show="form.address" x-html="form.address" class="font-sultann text-xl"></p>
+                    <p x-show="form.address" x-html="form.address" class="font-sultann text-xl whitespace-pre-line">
+                    </p>
 
                     <p x-show="form.official" class="font-sultanb text-xl">بالطريق الرسمي</p>
 
@@ -109,7 +120,8 @@
                         <span x-html="form.body" class="whitespace-pre-line"></span>
                     </div>
 
-                    <div x-show="form.body" class=" mt-5 font-sultanb text-xl text-center">وتفضلوا بقبول وافر الاحترام والتقدير</div>
+                    <div x-show="form.body" class=" mt-5 font-sultanb text-xl text-center">وتفضلوا بقبول وافر الاحترام
+                        والتقدير</div>
 
                     <div x-html="form.sender" class=" mt-5 pb-16 font-sultanb text-2xl w-2/6 text-center ms-auto">
                     </div>
@@ -135,6 +147,67 @@
                 route: 'letters',
                 filters: {
                     search: '',
+                },
+            
+
+                projects: [
+                    {
+                        id:'0',
+                        name:'Overall',
+                        subject:`الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
+Overall Projects
+بخصوص: `,
+                    },
+                    {
+                        id:'2',
+                        name:'مشروغ 2',
+                        subject:`الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
+Project 2: New Wafra WDC II
+بخصوص: `,
+                    },
+                    {
+                        id:'5',
+                        name:'مشروغ 5',
+                        subject:`الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
+Project 5: Study fresh and brackish water demand and supply up to 2040
+بخصوص: `,
+                    },
+                    {
+                        id:'6',
+                        name:'مشروغ 6',
+                        subject:`الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
+Project 6: Water Projects Sector Office Building Project
+بخصوص: `,
+                    },
+                    {
+                        id:'8',
+                        name:'مشروغ 8',
+                        subject:`الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
+Project 8: Preparation of Design Manuals and Standards Tender / Contract Documents
+بخصوص: `,
+                    },
+                ],
+
+                setSubject(id) {
+                    const index = this.projects.findIndex(project => project.id === id);
+                    this.form.subject = this.projects[index].subject
+                },
+
+                toDar() {
+                    this.form.internal = false;
+                    this.form.official = false;
+                    this.form.code = false;
+                    this.form.prefix = 'السادة';
+                    this.form.receiver = 'دار الهندسة للتصميم والاستشارات الفنية (شاعر ومشاركوه)';
+                    this.form.sender = 'وكيل وزارة الكهرباء والماء والطاقة المتجددة';
+                    this.form.body = 'بالإشارة الى الموضوع أعلاه، ';
+                    this.form.address = `العنوان: سلوي قطعة  (10) شارع (7) مبني (4)
+هاتف: 25658304/8275
+فاكس: 25658396
+ص.ب: 1938 الصفاة 13020 الكويت`;
+                    this.form.copyTo = `الوكيل المساعد لمشاريع المياه
+مدير ادارة تصميم مشاريع الشبكات والمنشآت المائية
+مراقب الرسم والتصوير`;
                 },
 
                 fillForm(record, type) {
