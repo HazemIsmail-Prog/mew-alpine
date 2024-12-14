@@ -81,8 +81,7 @@
 
 
         <div x-show="showModal" class="w-1/2 border rounded-lg p-3 overflow-auto">
-            <div id="previewContent" class=" flex flex-col mx-auto bg-white pb-20"
-                x-bind:style="'max-width: 210mm; min-height: 296mm; background-image: none;'">
+            <div id="previewContent" class=" flex flex-col mx-auto bg-white pb-20 w-[210mm] min-h-[296mm]">
 
                 <div class="mt-48"></div>
 
