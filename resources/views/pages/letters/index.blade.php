@@ -1,8 +1,8 @@
 <x-app-layout>
     <div x-data="documentGenerator()" class="flex h-full p-3 gap-3">
 
-        <div class="w-[500px] flex flex-col gap-3 border rounded-lg p-3 overflow-y-auto">
-            <div class="flex items-center gap-2">
+        <div class="w-1/2 xl:w-1/4 shrink-0 flex flex-col gap-3 border rounded-lg p-3 overflow-y-auto">
+            <div class="flex items-center gap-1">
                 <input class="w-1/4" type="number" min="1" placeholder="رقم الملف" x-model="filters.id">
                 <input class="w-3/4" type="text" placeholder="{{__('Search')}}" x-model="filters.search">
             </div>
@@ -45,7 +45,7 @@
         </div>
 
 
-        <div x-show="showModal" class=" flex-1 flex flex-col gap-3 border rounded-lg p-3 overflow-y-auto">
+        <div x-show="showModal" class="w-1/2 xl:w-2/6 flex flex-col gap-3 border rounded-lg p-3 overflow-y-auto">
             <label for="internal">
                 <input id="internal" type="checkbox" x-bind:checked="form.internal" x-model="form.internal">
                 <span>مذكرة داخلية</span>
@@ -94,7 +94,7 @@
         </div>
 
 
-        <div x-show="showModal" class="min-w-[220mm] border rounded-lg p-3 overflow-auto">
+        <div x-show="showModal" class="w-0 xl:w-auto border rounded-lg p-3 overflow-auto">
             <div id="previewContent" class=" flex flex-col mx-auto bg-white pb-20 w-[210mm] min-h-[296mm]">
 
                 <div class="mt-48"></div>
