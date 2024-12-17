@@ -21,7 +21,13 @@ class LetterController extends Controller
         $filters = $request->query('filters');
         $letters = Letter::query()
 
-            ->where('user_id', $request->user()->id)
+            ->when($request->user()->role == 'user', function (Builder $q) use ($request) {
+                $q->where('user_id', $request->user()->id);
+            })
+
+            ->when(isset($filters['id']), function (Builder $q) use ($filters) {
+                $q->where('id',$filters['id']);
+            })
             ->when(isset($filters['search']), function (Builder $q) use ($filters) {
                 $q->where(function (Builder $q) use ($filters) {
                     $q->whereAny(
@@ -44,19 +50,13 @@ class LetterController extends Controller
 
     public function update(Request $request, Letter $letter)
     {
-        // $request->validate([
-        //     'contract_id' => 'required',
-        //     'from_id' => 'required',
-        //     'to_id' => 'required',
-        //     'type' => 'required',
-        //     'title' => 'required',
-        //     // 'is_completed' => 'required|boolean',
-        //     'ref' => 'nullable',
-        //     'content' => 'nullable',
-        //     'notes' => 'nullable',
-        //     'follow_ids' => 'nullable|array',
-        //     'tag_ids' => 'nullable|array',
-        // ]);
+        $request->validate([
+            'sender' => 'required',
+            'receiver' => 'required',
+            'subject' => 'required',
+            'copyTo' => 'required',
+            'body' => 'required',
+        ]);
 
         $letter->update($request->all());
         return new LetterResource($letter);
@@ -64,19 +64,13 @@ class LetterController extends Controller
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'contract_id' => 'required',
-        //     'from_id' => 'required_without:to_id|nullable',
-        //     'to_id' => 'required_without:from_id|nullable',
-        //     'type' => 'required',
-        //     'title' => 'required',
-        //     'is_completed' => 'required|boolean',
-        //     'ref' => 'nullable',
-        //     'content' => 'nullable',
-        //     'notes' => 'nullable',
-        //     'follow_ids' => 'nullable|array',
-        //     'tag_ids' => 'nullable|array',
-        // ]);
+        $request->validate([
+            'sender' => 'required',
+            'receiver' => 'required',
+            'subject' => 'required',
+            'copyTo' => 'required',
+            'body' => 'required',
+        ]);
         $letter = Letter::create($request->all());
         return new LetterResource($letter);
     }

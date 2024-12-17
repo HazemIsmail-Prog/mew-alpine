@@ -2,7 +2,10 @@
     <div x-data="documentGenerator()" class="flex h-full p-3 gap-3">
 
         <div class="w-[500px] flex flex-col gap-3 border rounded-lg p-3 overflow-y-auto">
-            <input type="text" x-model="filters.search">
+            <div class="flex items-center gap-2">
+                <input class="w-1/4" type="number" min="1" placeholder="رقم الملف" x-model="filters.id">
+                <input class="w-3/4" type="text" placeholder="{{__('Search')}}" x-model="filters.search">
+            </div>
 
             <button x-on:click="openModal()"
                 class="bg-primary cursor-pointer border rounded-lg p-2 text-white">{{ __('New Letter') }}</button>
@@ -66,8 +69,9 @@
             <textarea placeholder="الموضوع" x-model="form.subject" rows="5" class="border p-2 rounded"></textarea>
             <div x-show="!form.id" class=" flex items-center justify-end gap-2">
                 <template x-for="project in projects" :key="project.id">
-                    <span  x-on:click="setSubject(project.id)"
-                    class=" cursor-pointer bg-primary text-white place-self-end text-xs font-medium px-2.5 py-0.5 rounded" x-text="project.name"></span>
+                    <span x-on:click="setSubject(project.id)"
+                        class=" cursor-pointer bg-primary text-white place-self-end text-xs font-medium px-2.5 py-0.5 rounded"
+                        x-text="project.name"></span>
                 </template>
             </div>
 
@@ -146,43 +150,43 @@
             return {
                 route: 'letters',
                 filters: {
+                    id: '',
                     search: '',
                 },
-            
 
-                projects: [
-                    {
-                        id:'0',
-                        name:'Overall',
-                        subject:`الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
+
+                projects: [{
+                        id: '0',
+                        name: 'Overall',
+                        subject: `الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
 Overall Projects
 بخصوص: `,
                     },
                     {
-                        id:'2',
-                        name:'مشروغ 2',
-                        subject:`الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
+                        id: '2',
+                        name: 'مشروغ 2',
+                        subject: `الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
 Project 2: New Wafra WDC II
 بخصوص: `,
                     },
                     {
-                        id:'5',
-                        name:'مشروغ 5',
-                        subject:`الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
+                        id: '5',
+                        name: 'مشروغ 5',
+                        subject: `الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
 Project 5: Study fresh and brackish water demand and supply up to 2040
 بخصوص: `,
                     },
                     {
-                        id:'6',
-                        name:'مشروغ 6',
-                        subject:`الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
+                        id: '6',
+                        name: 'مشروغ 6',
+                        subject: `الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
 Project 6: Water Projects Sector Office Building Project
 بخصوص: `,
                     },
                     {
-                        id:'8',
-                        name:'مشروغ 8',
-                        subject:`الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
+                        id: '8',
+                        name: 'مشروغ 8',
+                        subject: `الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
 Project 8: Preparation of Design Manuals and Standards Tender / Contract Documents
 بخصوص: `,
                     },

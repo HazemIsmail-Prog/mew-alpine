@@ -64,7 +64,7 @@
             <p class="ms-auto me-10">{{ $letter->suffix }}</p>
         </div>
         @if ($letter->address)
-            <p class="font-sultann text-xl">{!! $letter->address !!}</p>
+            <p class="font-sultann text-xl whitespace-pre-line">{!! $letter->address !!}</p>
         @endif
 
         @if ($letter->official)
