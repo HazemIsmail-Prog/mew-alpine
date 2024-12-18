@@ -74,7 +74,7 @@
         <p class="font-sultanb text-xl">تحية طيبة وبعد،،،</p>
 
         <div
-            class="mt-5 pb-3 w-fit max-w-[75%] mx-auto text-center font-sultanb font-bold text-xl border-b border-black">
+            class="mt-5 pb-3 w-fit max-w-[85%] mx-auto text-center font-sultanb font-bold text-xl border-b border-black">
             <span class="whitespace-pre-line">{!! $letter->subject !!}</span>
         </div>
 

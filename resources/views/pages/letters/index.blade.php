@@ -116,7 +116,7 @@
                     <p x-show="form.receiver" class="font-sultanb text-xl">تحية طيبة وبعد،،،</p>
 
                     <div
-                        class="mt-5 pb-3 w-fit max-w-[75%] mx-auto text-center font-sultanb font-bold text-xl border-b border-black">
+                        class="mt-5 pb-3 w-fit max-w-[85%] mx-auto text-center font-sultanb font-bold text-xl border-b border-black">
                         <span x-html="form.subject" class="whitespace-pre-line"></span>
                     </div>
 
