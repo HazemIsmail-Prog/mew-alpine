@@ -14,6 +14,20 @@ class LetterResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'subject' => $this->subject,
+            'sender' => $this->sender,
+            'receiver' => $this->receiver,
+            $this->mergeWhen($request->user()->role != 'user', [
+                'creator' => $this->whenLoaded('creator')->name,
+            ]),
+            'body' => $this->body,
+            'official' => $this->official,
+            'internal' => $this->internal,
+            'copyTo' => $this->copyTo,
+            'code' => $this->code,
+            'address' => $this->address,
+        ];
     }
 }

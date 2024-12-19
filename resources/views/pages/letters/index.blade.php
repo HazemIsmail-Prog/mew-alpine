@@ -22,6 +22,7 @@
                             <div class="whitespace-pre-line font-bold" x-html="record.subject"></div>
                             <div x-text="record.sender"></div>
                             <div x-text="record.receiver"></div>
+                            <div x-text="record.creator"></div>
                         </div>
                     </div>
 
@@ -282,7 +283,7 @@ Project 8: Preparation of Design Manuals and Standards Tender / Contract Documen
                             }
                         })
                         .then((response) => {
-                            const data = response.data;
+                            const data = response.data;                            
 
                             if (page === 1) {
                                 this.records = data.data;

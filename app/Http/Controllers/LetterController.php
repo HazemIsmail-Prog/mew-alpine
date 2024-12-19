@@ -21,12 +21,14 @@ class LetterController extends Controller
         $filters = $request->query('filters');
         $letters = Letter::query()
 
+            ->with('creator')
+
             ->when($request->user()->role == 'user', function (Builder $q) use ($request) {
                 $q->where('user_id', $request->user()->id);
             })
 
             ->when(isset($filters['id']), function (Builder $q) use ($filters) {
-                $q->where('id',$filters['id']);
+                $q->where('id', $filters['id']);
             })
             ->when(isset($filters['search']), function (Builder $q) use ($filters) {
                 $q->where(function (Builder $q) use ($filters) {
@@ -35,7 +37,8 @@ class LetterController extends Controller
                             'subject',
                             'body',
                             'receiver',
-                            'sender'
+                            'sender',
+                            'copyTo',
                         ],
                         'LIKE',
                         "%" . $filters['search'] . "%"
@@ -59,7 +62,7 @@ class LetterController extends Controller
         ]);
 
         $letter->update($request->all());
-        return new LetterResource($letter);
+        return new LetterResource($letter->load('creator'));
     }
 
     public function store(Request $request)
@@ -72,7 +75,7 @@ class LetterController extends Controller
             'body' => 'required',
         ]);
         $letter = Letter::create($request->all());
-        return new LetterResource($letter);
+        return new LetterResource($letter->load('creator'));
     }
 
     public function destroy(Letter $letter)
