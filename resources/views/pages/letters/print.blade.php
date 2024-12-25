@@ -45,13 +45,13 @@
         ol {
             list-style-type: decimal !important;
             list-style-position: inside !important;
-            padding-inline-start: 1.5rem
+            padding-inline-start: 1.5rem !important;
         }
 
         ul {
             list-style-type: disc !important;
             list-style-position: inside !important;
-            padding-inline-start: 1.5rem
+            padding-inline-start: 1.5rem !important;
         }
 
         table {
@@ -99,8 +99,12 @@
             <span class="whitespace-pre-line">{!! $letter->subject !!}</span>
         </div>
 
+        {{-- <div class="mt-5 text-justify  font-sultann text-lg leading-10">
+            <span x-html="form.body"></span>
+        </div> --}}
+
         <div class="mt-5 text-justify  font-sultann text-lg leading-10">
-            <span class="whitespace-pre-line">{!! $letter->body !!}</span>
+            <span>{!! $letter->body !!}</span>
         </div>
 
         <div class=" mt-5 font-sultanb text-xl text-center">وتفضلوا بقبول وافر الاحترام والتقدير</div>
