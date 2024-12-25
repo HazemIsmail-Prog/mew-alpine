@@ -18,6 +18,7 @@ class LetterResource extends JsonResource
             'id' => $this->id,
             'subject' => $this->subject,
             'sender' => $this->sender,
+            'prefix' => $this->prefix,
             'receiver' => $this->receiver,
             $this->mergeWhen($request->user()->role != 'user', [
                 'creator' => $this->whenLoaded('creator')->name,

@@ -42,6 +42,27 @@
             background-size: 100%;
             background-repeat: no-repeat;
         }
+        ol {
+            list-style-type: decimal !important;
+            list-style-position: inside !important;
+            padding-inline-start: 1.5rem
+        }
+
+        ul {
+            list-style-type: disc !important;
+            list-style-position: inside !important;
+            padding-inline-start: 1.5rem
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 0 auto;
+        }
+        td {
+            border: 1px solid #000 !important;
+            padding: 0 10px;
+        }
 
         /*  */
     </style>
@@ -78,7 +99,7 @@
             <span class="whitespace-pre-line">{!! $letter->subject !!}</span>
         </div>
 
-        <div class="mt-5 text-justify  font-sultann text-lg leading-10" style="text-indent: 3rem;">
+        <div class="mt-5 text-justify  font-sultann text-lg leading-10">
             <span class="whitespace-pre-line">{!! $letter->body !!}</span>
         </div>
 

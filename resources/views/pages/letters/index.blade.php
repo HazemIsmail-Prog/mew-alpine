@@ -4,7 +4,7 @@
         <div class="w-1/2 xl:w-1/4 shrink-0 flex flex-col gap-3 border rounded-lg p-3 overflow-y-auto">
             <div class="flex items-center gap-1">
                 <input class="w-1/4" type="number" min="1" placeholder="رقم الملف" x-model="filters.id">
-                <input class="w-3/4" type="text" placeholder="{{__('Search')}}" x-model="filters.search">
+                <input class="w-3/4" type="text" placeholder="{{ __('Search') }}" x-model="filters.search">
             </div>
 
             <button x-on:click="openModal()"
@@ -46,28 +46,28 @@
         </div>
 
 
-        <div x-show="showModal" class="w-1/2 xl:w-2/6 flex flex-col gap-3 border rounded-lg p-3 overflow-y-auto">
+        <div x-cloak x-show="showModal" class="w-1/2 xl:w-2/6 flex flex-col h-full gap-3 border rounded-lg p-3 overflow-y-auto">
             <label for="internal">
                 <input id="internal" type="checkbox" x-bind:checked="form.internal" x-model="form.internal">
-                <span>مذكرة داخلية</span>
+                <span class="font-sultanb ms-2">مذكرة داخلية</span>
             </label>
-            <input type="text" placeholder="من" x-model="form.sender" class="border p-2 rounded">
+            <input type="text" placeholder="من" x-model="form.sender" class="border p-2 font-sultanb text-xl">
             <div class=" flex w-full gap-1">
-                <select x-model="form.prefix">
+                <select x-model="form.prefix" class="font-sultanb text-xl">
                     <option value="السيد">السيد</option>
                     <option value="السادة">السادة</option>
                 </select>
-                <input type="text" placeholder="الى" x-model="form.receiver" class="border p-2 rounded flex-1">
+                <input type="text" placeholder="الى" x-model="form.receiver" class="border p-2 font-sultanb text-xl flex-1">
             </div>
             <span x-show="!form.id" x-on:click="toDar"
                 class=" cursor-pointer bg-primary text-white place-self-end text-xs font-medium px-2.5 py-0.5 rounded">الى
                 دار الهندسة</span>
             <label for="official">
                 <input id="official" type="checkbox" x-bind:checked="form.official" x-model="form.official">
-                <span>بالطريق الرسمي</span>
+                <span class="font-sultanb ms-2">بالطريق الرسمي</span>
             </label>
-            <textarea placeholder="العنوان" x-model="form.address" rows="3"></textarea>
-            <textarea placeholder="الموضوع" x-model="form.subject" rows="5" class="border p-2 rounded"></textarea>
+            <textarea placeholder="العنوان" x-model="form.address" class=" min-h-[100px] font-sultann" rows="3"></textarea>
+            <textarea placeholder="الموضوع" x-model="form.subject" rows="5" class="border p-2 font-sultanb font-bold min-h-[100px]"></textarea>
             <div x-show="!form.id" class=" flex items-center justify-end gap-2">
                 <template x-for="project in projects" :key="project.id">
                     <span x-on:click="setSubject(project.id)"
@@ -76,17 +76,21 @@
                 </template>
             </div>
 
-            <textarea placeholder="محتوى الكتاب" id="body" x-model="form.body" rows="10" class="border p-2 rounded"></textarea>
+            <div class="k-rtl">
+                <textarea dir="rtl" id="editor" rows="10" cols="30" style="width:100%; height:300px" aria-label="editor"></textarea>
+            </div>
+
+            {{-- <textarea placeholder="محتوى الكتاب" id="body" x-model="form.body" rows="10" class="border p-2 rounded"></textarea> --}}
             <label for="code">
                 <input id="code" type="checkbox" x-bind:checked="form.code" x-model="form.code">
-                <span>كود ترميز القطاع</span>
+                <span class="font-sultanb ms-2">كود ترميز القطاع</span>
             </label>
             <label for="has_attachments">
                 <input id="has_attachments" type="checkbox" x-bind:checked="form.has_attachments"
                     x-model="form.has_attachments">
-                <span>مرفقات</span>
+                <span class="font-sultanb ms-2">مرفقات</span>
             </label>
-            <textarea placeholder="نسخة لكل من" x-model="form.copyTo" rows="5" class="border p-2 rounded"></textarea>
+            <textarea placeholder="نسخة لكل من" x-model="form.copyTo" rows="5" class="border p-2 font-sultann  min-h-[100px]"></textarea>
 
 
             <x-primary-button x-on:click="submitRecord"
@@ -95,13 +99,14 @@
         </div>
 
 
-        <div x-show="showModal" class="w-0 xl:w-auto border rounded-lg p-3 overflow-auto">
+        <div x-cloak x-show="showModal" class="w-0 xl:w-auto border rounded-lg p-3 overflow-auto">
             <div id="previewContent" class=" flex flex-col mx-auto bg-white pb-20 w-[210mm] min-h-[296mm]">
 
                 <div class="mt-48"></div>
 
                 <div class="content-wrapper justify-between mx-20">
-                    <p x-show="form.internal" class="text-center text-2xl font-bold mb-2 font-sultann">مذكرة داخلية</p>
+                    <p x-show="form.internal" class="text-center text-2xl font-bold mb-2 font-sultann">مذكرة داخلية
+                    </p>
 
                     <div x-show="form.receiver" class="flex gap-2 font-sultanb text-2xl">
                         <p x-text="form.prefix"></p>
@@ -121,8 +126,8 @@
                         <span x-html="form.subject" class="whitespace-pre-line"></span>
                     </div>
 
-                    <div class="mt-5 text-justify  font-sultann text-lg leading-10" style="text-indent: 3rem;">
-                        <span x-html="form.body" class="whitespace-pre-line"></span>
+                    <div class="mt-5 text-justify  font-sultann text-lg leading-10">
+                        <span x-html="form.body"></span>
                     </div>
 
                     <div x-show="form.body" class=" mt-5 font-sultanb text-xl text-center">وتفضلوا بقبول وافر الاحترام
@@ -142,9 +147,34 @@
                 </div>
 
             </div>
-            {{-- </div> --}}
         </div>
     </div>
+
+    <link href="https://kendo.cdn.telerik.com/themes/10.0.1/default/default-main.css" rel="stylesheet" />
+
+    <style>
+        ol {
+            list-style-type: decimal !important;
+            list-style-position: inside !important;
+            padding-inline-start: 1.5rem
+        }
+
+        ul {
+            list-style-type: disc !important;
+            list-style-position: inside !important;
+            padding-inline-start: 1.5rem
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 0 auto;
+        }
+        td {
+            border: 1px solid #000 !important;
+            padding: 0 10px;
+        }
+    </style>
 
     <script>
         function documentGenerator() {
@@ -239,11 +269,77 @@ Project 8: Preparation of Design Manuals and Standards Tender / Contract Documen
                 totalResults: 0,
 
                 init() {
+
+                    const editorElement = $('#editor');
+
+                    editorElement.kendoEditor({
+                        // stylesheets: [
+                        //     "{{asset('css/app.css')}}",
+                        // ],
+                        tools: [
+                            // "bold",
+                            // "italic",
+                            // "underline",
+                            // "strikethrough",
+                            "justifyRight",
+                            "justifyCenter",
+                            "justifyLeft",
+                            "justifyFull",
+                            "lineHeight",
+
+                            // "createLink",
+                            "insertUnorderedList",
+                            "insertOrderedList",
+                            "outdent",
+                            "indent",
+                            // "unlink",
+                            // "insertImage",
+                            "createTable",
+                            "addColumnLeft",
+                            "addColumnRight",
+                            "addRowAbove",
+                            "addRowBelow",
+                            "deleteRow",
+                            "deleteColumn",
+                            // "foreColor",
+                            // "backColor"
+                        ],
+                        select: (e) => {
+                            this.form.body = editorElement.data("kendoEditor").value();
+                        },
+                        change: (e) => {
+                            this.form.body = editorElement.data("kendoEditor").value();
+                        },
+                        execute: (e) => {
+                            this.form.body = editorElement.data("kendoEditor").value();
+                        },
+                        paste: (e) => {
+                            this.form.body = editorElement.data("kendoEditor").value();
+                        },
+                        keyup: () => {
+                            this.form.body = editorElement.data("kendoEditor").value();
+                        },
+                    });
+
+                    const createdElement = editorElement.data("kendoEditor").document
+                    createdElement.body.style.fontSize = '18px';
+                    createdElement.body.style.fontFamily = 'Sultan Normal, sans-serif';
+                    // createdElement.body.style.lineHeight = '2';
+                    
+
                     axios.defaults.headers.common["X-CSRF-TOKEN"] = document
                         .querySelector('meta[name="csrf-token"]')
                         .getAttribute("content");
 
                     this.fetchRecords();
+
+                    this.$watch('form', value => {
+                        if (value.body) {
+                            editorElement.data("kendoEditor").value(value.body);
+                        } else {
+                            editorElement.data("kendoEditor").value('');
+                        }
+                    });
 
                     this.$watch('filters', value => {
                         if (value) {
@@ -283,7 +379,7 @@ Project 8: Preparation of Design Manuals and Standards Tender / Contract Documen
                             }
                         })
                         .then((response) => {
-                            const data = response.data;                            
+                            const data = response.data;
 
                             if (page === 1) {
                                 this.records = data.data;
