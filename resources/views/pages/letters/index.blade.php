@@ -114,7 +114,7 @@
                         <p x-text="form.receiver"></p>
                         <p x-text="suffix" class="ms-auto me-10"></p>
                     </div>
-                    <p x-show="form.address" x-html="form.address" class="font-sultann text-xl whitespace-pre-line">
+                    <p x-show="form.address" x-html="form.address" class="font-sultann whitespace-pre-line">
                     </p>
 
                     <p x-show="form.official" class="font-sultanb text-xl">بالطريق الرسمي</p>
