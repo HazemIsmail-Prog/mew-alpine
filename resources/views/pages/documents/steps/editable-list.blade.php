@@ -3,7 +3,7 @@
         {{-- Step Row --}}
         <div x-sort:item="step.id" class="flex items-center gap-2 py-1 border-b border-primary border-dashed">
             <div class="flex-1 flex items-center gap-2">
-                <p x-text="step.id"></p>
+                <!-- <p x-text="step.id"></p> -->
                 @can('updateSteps', App\Models\Document::class)
                     <input x-model="step.is_completed" x-on:change="toggleStepCompleted(step)"
                         x-bind:checked="step.is_completed" type="checkbox" value=""
