@@ -195,28 +195,35 @@ Overall Projects
                     },
                     {
                         id: '2',
-                        name: 'مشروغ 2',
+                        name: 'مشروع 2',
                         subject: `الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
 Project 2: New Wafra WDC II
 بخصوص: `,
                     },
                     {
                         id: '5',
-                        name: 'مشروغ 5',
+                        name: 'مشروع 5',
                         subject: `الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
 Project 5: Study fresh and brackish water demand and supply up to 2040
 بخصوص: `,
                     },
                     {
                         id: '6',
-                        name: 'مشروغ 6',
+                        name: 'مشروع 6',
                         subject: `الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
 Project 6: Water Projects Sector Office Building Project
 بخصوص: `,
                     },
                     {
+                        id: '7',
+                        name: 'مشروع 7',
+                        subject: `الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
+Project 7: KUWAIT CITY WATER NETWORKS
+بخصوص: `,
+                    },
+                    {
                         id: '8',
-                        name: 'مشروغ 8',
+                        name: 'مشروع 8',
                         subject: `الموضوع: العقد رقم وك م /ع/ 5942 /2023/2024
 Project 8: Preparation of Design Manuals and Standards Tender / Contract Documents
 بخصوص: `,
