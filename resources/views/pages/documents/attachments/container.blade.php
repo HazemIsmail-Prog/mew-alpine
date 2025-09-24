@@ -75,6 +75,7 @@
                 if (files.length > 0) {
                     this.attachmentForm.file = null;
                     this.attachmentForm.file = files[0];
+                    this.attachmentForm.description = files[0].name.replace(/\.[^/.]+$/, "");
                 }
             },
 
@@ -83,6 +84,7 @@
                 if (files.length > 0) {
                     this.attachmentForm.file = null;
                     this.attachmentForm.file = files[0];
+                    this.attachmentForm.description = files[0].name.replace(/\.[^/.]+$/, "");
                 }
             },
 
