@@ -38,9 +38,9 @@ class Document extends Model
         return $this->belongsToMany(Tag::class);
     }
 
-    public function contract(): BelongsTo
+    public function contracts(): BelongsToMany
     {
-        return $this->belongsTo(Contract::class);
+        return $this->belongsToMany(Contract::class);
     }
 
     public function sender(): BelongsTo

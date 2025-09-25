@@ -20,6 +20,7 @@ class DocumentResource extends JsonResource
         return [
             'id' => $this->id,
             'contract_id' => $this->contract_id,
+            'contract_ids' => $this->contracts()->pluck('id'),
             'from_id' => $this->from_id,
             'to_id' => $this->to_id,
             'type' => $this->type,

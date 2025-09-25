@@ -45,7 +45,7 @@
             fillForm(record, type) {
                 this.form = {
                     id: record?.id ?? null,
-                    contract_id: record?.contract_id ?? null,
+                    contract_ids: record?.contract_ids ?? [],
                     from_id: record?.from_id ?? null,
                     to_id: record?.to_id ?? null,
                     type: record?.type ?? type,

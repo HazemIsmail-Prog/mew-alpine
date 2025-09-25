@@ -77,8 +77,11 @@ class DocumentController extends Controller
 
         $filters = $request->query('filters');
         $documents = Document::query()
-        
-            ->whereIn('contract_id', $request->user()->contracts()->pluck('id'))
+            ->with('contracts')
+            ->whereHas('contracts', function (Builder $q) use ($request) {
+                $q->whereIn('id', $request->user()->contracts()->pluck('id'));
+            })
+            // ->whereIn('contract_id', $request->user()->contracts()->pluck('id'))
             ->when(isset($filters['search']), function (Builder $q) use ($filters) {
                 $q->where(function (Builder $q) use ($filters) {
                     $q->whereAny(
@@ -96,7 +99,9 @@ class DocumentController extends Controller
                 });
             })
             ->when(isset($filters['contract_ids']), function (Builder $q) use ($filters) {
-                $q->whereIn('contract_id', $filters['contract_ids']);
+                $q->whereHas('contracts', function (Builder $q) use ($filters) {
+                    $q->whereIn('id', $filters['contract_ids']);
+                });
             })
             ->when(isset($filters['stakeholder_ids']), function (Builder $q) use ($filters, $authStakeholderId) {
                 $q->where(function ($query) use ($filters, $authStakeholderId) {
@@ -153,7 +158,7 @@ class DocumentController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $request->validate([
-            'contract_id' => 'required',
+            'contract_ids' => 'required|array',
             'from_id' => 'required_without:to_id|nullable',
             'to_id' => 'required_without:from_id|nullable',
             'type' => 'required',
@@ -165,7 +170,8 @@ class DocumentController extends Controller
             'follow_ids' => 'nullable|array',
             'tag_ids' => 'nullable|array',
         ]);
-        $document = Document::create($request->except('follow_ids', 'tag_ids', 'can_update', 'can_delete'));
+        $document = Document::create($request->except('follow_ids', 'tag_ids', 'contract_ids', 'can_update', 'can_delete'));
+        $document->contracts()->sync($request->contract_ids);
         $document->users()->sync($request->follow_ids);
         $document->tags()->sync($request->tag_ids);
         return new DocumentResource($document);
@@ -177,7 +183,7 @@ class DocumentController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $request->validate([
-            'contract_id' => 'required',
+            'contract_ids' => 'required|array',
             'from_id' => 'required',
             'to_id' => 'required',
             'type' => 'required',
@@ -190,7 +196,8 @@ class DocumentController extends Controller
             'tag_ids' => 'nullable|array',
         ]);
 
-        $document->update($request->except('follow_ids', 'tag_ids', 'is_completed', 'can_update', 'can_delete'));
+        $document->update($request->except('follow_ids', 'tag_ids', 'contract_ids', 'is_completed', 'can_update', 'can_delete'));
+        $document->contracts()->sync($request->contract_ids);
         $document->users()->sync($request->follow_ids);
         $document->tags()->sync($request->tag_ids);
         return new DocumentResource($document);

@@ -19,8 +19,10 @@
         ]">
         <div class=" w-full">
             <div class=" font-extrabold text-lg whitespace-pre-line" x-html="record.title"></div>
-            <div class="text-sm" x-text="getName('contract', record.contract_id)">
-            </div>
+            <!-- <div class="text-sm" x-text="getName('contract', record.contract_id)"></div> -->
+            <template x-for="contract_id in record.contract_ids" :key="contract_id">
+                <div class="text-sm" x-text="getName('contract', contract_id)"></div>
+            </template>
             <div class=" flex items-center gap-1">
                 <x-svg.inbox x-show="record.type == 'incoming'" class=" size-4 shrink-0" x-bind:class="form.id == record.id ? 'text-white' : 'text-success'" />
                 <x-svg.outbox x-show="record.type == 'outgoing'" class=" size-4 shrink-0" x-bind:class="form.id == record.id ? 'text-white' : 'text-danger'" />
@@ -33,13 +35,13 @@
                     </div>
                 </div>
             </div>
-            {{-- <template x-if="record.follow_ids.length">
+            <!-- <template x-if="record.follow_ids.length">
                 <div class=" mt-1 flex gap-1 items-start">
                     <template x-for="id in record.follow_ids" :key="id">
                         <div class="text-sm rounded-md px-3 bg-primary text-white" x-text="getName('user',id)"></div>
                     </template>
                 </div>
-            </template> --}}
+            </template> -->
         </div>
         <template x-if="record.uncompleted_steps.length">
             <div class=" w-full md:max-w-[25%] flex flex-col gap-1 items-start md:items-end">

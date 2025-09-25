@@ -2,8 +2,8 @@
     <h1 class="text-primary font-extrabold">{{ __('Document Details') }}</h1>
     <div class=" flex flex-col gap-2">
 
-        <x-dropdown-test id="form.contract_id" label="{{ __('Contract') }}" :list="$contracts" :multiple="false"
-            model="form.contract_id" selected-items="form.contract_id" />
+        <x-dropdown-test id="form.contract_ids" label="{{ __('Contract') }}" :list="$contracts" :multiple="true"
+            model="form.contract_ids" selected-items="form.contract_ids" />
 
         <div x-show="form.type === 'incoming'">
             <x-dropdown-test id="form.from_id" label="{{ __('Sender') }}" :list="$stakeholders" :multiple="false"
