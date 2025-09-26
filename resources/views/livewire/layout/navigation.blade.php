@@ -15,7 +15,7 @@ new class extends Component {
     }
 }; ?>
 
-<nav x-data="{ open: false }" class="bg-primary bg-opacity-5">
+<nav x-data="{ open: false }" class="bg-primary bg-opacity-5 print:hidden">
     <!-- Primary Navigation Menu -->
     <div class="mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">

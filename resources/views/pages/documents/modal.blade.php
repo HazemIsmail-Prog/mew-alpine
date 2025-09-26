@@ -1,6 +1,6 @@
 {{-- Modal --}}
 <div x-show="showModal"
-    class="flex flex-col gap-3 bg-primary px-3 bg-opacity-5 h-full overflow-y-auto w-full lg:w-[416px] transition-all duration-150">
+    class="print:hidden flex flex-col gap-3 bg-primary px-3 bg-opacity-5 h-full overflow-y-auto w-full lg:w-[416px] transition-all duration-150">
     <div class="p-2 border-b border-primary flex items-center gap-3 text-primary font-extrabold">
         <button x-on:click="closeModal">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

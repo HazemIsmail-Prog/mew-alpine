@@ -31,7 +31,7 @@
             @endif
 
             <!-- Page Content -->
-            <main class="h-[calc(100dvh-65px)]">
+            <main class="h-[calc(100dvh-65px)] print:h-full">
                 {{ $slot }}
             </main>
         </div>

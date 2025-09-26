@@ -4,7 +4,7 @@
     <p>{{ __('Results') }}: <span x-text="totalResults"></span></p>
 
     @can('create', App\Models\Document::class)
-        <div class=" flex items-center gap-3">
+        <div class=" flex items-center gap-3 print:hidden">
             <button x-on:click="openModal(null,'outgoing')" type="button"
                 class="flex items-center justify-center gap-1 h-9 py-1 w-28 rounded-lg text-white font-bold !bg-danger px-4">
                 <x-svg.outbox class=" size-6" />
@@ -23,7 +23,7 @@
     @endcan
 </div>
 
-<div class=" p-2 border border-dashed border-primary rounded-md mt-2 flex flex-col lg:flex-row items-start gap-2">
+<div class="print:hidden p-2 border border-dashed border-primary rounded-md mt-2 flex flex-col lg:flex-row items-start gap-2">
     <div class="w-full">
         <x-input-label for="filterSearch" value="{{ __('Search') }}" />
         <input id="filterSearch" x-model="filters.search" type="text"
