@@ -243,7 +243,7 @@ Project 8: Preparation of Design Manuals and Standards Tender / Contract Documen
                     this.form.receiver = 'دار الهندسة للتصميم والاستشارات الفنية (شاعر ومشاركوه)';
                     this.form.sender = 'وكيل وزارة الكهرباء والماء والطاقة المتجددة';
                     this.form.body = 'بالإشارة الى الموضوع أعلاه، ';
-                    this.form.address = `العنوان: سلوي قطعة  (10) شارع (7) مبني (4)
+                    this.form.address = `العنوان: سلوى قطعة  (10) شارع (7) مبني (4)
 هاتف: 25658304/8275
 فاكس: 25658396
 ص.ب: 1938 الصفاة 13020 الكويت`;
