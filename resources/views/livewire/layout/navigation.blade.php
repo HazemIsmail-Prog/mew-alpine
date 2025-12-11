@@ -49,11 +49,15 @@ new class extends Component {
                         <x-nav-link :href="route('documents.index')" :active="request()->routeIs('documents.index')">
                             {{ __('Documents') }}
                         </x-nav-link>
-                        @endcan
+                    @endcan
                         <x-nav-link :href="route('letters.index')" :active="request()->routeIs('letters.index')">
                             {{ __('Letters') }}
                         </x-nav-link>
-
+                    @can('viewAny', App\Models\Vacation::class)
+                        <x-nav-link :href="route('vacations.index')" :active="request()->routeIs('vacations.index')">
+                            {{ __('Vacations') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -137,6 +141,11 @@ new class extends Component {
             @can('viewAny', App\Models\Document::class)
                 <x-responsive-nav-link :href="route('documents.index')" :active="request()->routeIs('documents.index')">
                     {{ __('Documents') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('viewAny', App\Models\Vacation::class)
+                <x-responsive-nav-link :href="route('vacations.index')" :active="request()->routeIs('vacations.index')">
+                    {{ __('Vacations') }}
                 </x-responsive-nav-link>
             @endcan
         </div>

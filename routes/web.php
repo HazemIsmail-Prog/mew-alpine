@@ -8,6 +8,7 @@ use App\Http\Controllers\StakeholderController;
 use App\Http\Controllers\StepController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VacationController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -19,6 +20,13 @@ Route::middleware('auth')->group(function () {
 
     Route::view('profile', 'profile')
         ->name('profile');
+
+    Route::controller(VacationController::class)->group(function () {
+        Route::get('/vacations', 'index')->name('vacations.index');
+        Route::post('/vacations', 'store');
+        Route::put('/vacations/{vacation}', 'update');
+        Route::delete('/vacations/{vacation}', 'destroy');
+    });
 
     Route::apiResource('/contracts', ContractController::class)->except('show');
     Route::controller(ContractController::class)->group(function () {
