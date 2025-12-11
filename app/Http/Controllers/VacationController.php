@@ -11,6 +11,29 @@ class VacationController extends Controller
     public function index(Request $request)
     {
         if ($request->wantsJson()) {
+            // For calendar view, fetch all vacations that overlap with the month
+            if ($request->has('month') && $request->has('year')) {
+                $monthStart = $request->year . '-' . str_pad($request->month, 2, '0', STR_PAD_LEFT) . '-01';
+                $monthEnd = date('Y-m-t', strtotime($monthStart));
+                
+                $vacations = Vacation::query()
+                    ->where(function ($q) use ($monthStart, $monthEnd) {
+                        // Vacation starts in this month
+                        $q->whereBetween('start_date', [$monthStart, $monthEnd])
+                            // Or vacation ends in this month
+                            ->orWhereBetween('end_date', [$monthStart, $monthEnd])
+                            // Or vacation spans the entire month
+                            ->orWhere(function ($q) use ($monthStart, $monthEnd) {
+                                $q->whereDate('start_date', '<=', $monthStart)
+                                    ->whereDate('end_date', '>=', $monthEnd);
+                            });
+                    })
+                    ->orderBy('start_date')
+                    ->get();
+                return response()->json($vacations);
+            }
+            
+            // Original paginated list view
             $vacations = Vacation::query()
                 ->select('*')
                 ->selectRaw('

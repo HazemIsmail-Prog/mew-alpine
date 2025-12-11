@@ -1,66 +1,88 @@
 <x-app-layout>
-    <div x-data="vacationsComponent()" class="flex h-full">
-        <div class="flex-1 mx-auto overflow-auto">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+    <div x-data="vacationsComponent()" class="flex flex-col lg:flex-row h-full">
+        <div class="flex-1 mx-auto overflow-auto w-full">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-2 sm:p-4 max-w-full">
+                <h1 class="text-2xl font-bold text-gray-900 text-center mb-5">{{__('Vacations')}}</h1>
 
-                <!-- Search and Create New Button -->
-                <div class="flex items-center justify-end gap-3 my-3 px-4">
-                    <input type="date" x-model="filters.date"
-                        class="flex-1 px-4 py-2 rounded-md border border-gray-300 focus:ring-primary focus:border-primary">
-                    <!-- <button x-on:click="resetFilters" type="button"
-                        class="h-9 py-1 px-4 rounded-lg text-primary border-primary border font-bold">
-                        {{ __('Reset Filters') }}
-                    </button> -->
+                <!-- Calendar Header -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3 sm:mb-4">
+                    <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                        <button 
+                            x-on:click="previousMonth()" 
+                            type="button"
+                            class="p-2 sm:p-2 rounded-lg border border-gray-300 hover:bg-gray-100 active:bg-gray-200 touch-manipulation"
+                        >
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                        <h2 class="text-base sm:text-xl font-bold text-gray-900 flex-1 text-center sm:text-left" x-text="getMonthYear()"></h2>
+                        <button 
+                            x-on:click="nextMonth()" 
+                            type="button"
+                            class="p-2 sm:p-2 rounded-lg border border-gray-300 hover:bg-gray-100 active:bg-gray-200 touch-manipulation"
+                        >
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <button 
+                            x-on:click="goToToday()" 
+                            type="button"
+                            class="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg border border-gray-300 hover:bg-gray-100 active:bg-gray-200 text-xs sm:text-sm touch-manipulation"
+                        >
+                            {{ __('Today') }}
+                        </button>
+                    </div>
 
                     @if(auth()->user()->role == 'admin' || auth()->user()->role == 'superAdmin')
                         <button x-on:click="openModal()" type="button"
-                            class="flex items-center justify-center gap-1 h-9 py-1 w-28 rounded-lg text-white font-bold !bg-danger px-4">
+                            class="flex items-center justify-center gap-1 h-9 py-1 w-full sm:w-28 rounded-lg text-white font-bold !bg-danger px-4 touch-manipulation">
                             {{ __('New') }}
                         </button>
                     @endif
                 </div>
 
-
-                <!-- Records -->
-                <div class="p-2 text-gray-900 flex flex-col gap-2">
-                    <template x-for="record in records" :key="record.id">
-                        <div class="flex items-center gap-3">
-                            <div x-on:click="record.can_update ? openModal(record) : null"
-                                class="flex-1 flex flex-col gap-1 items-start cursor-pointer border rounded-lg p-2 bg-zinc-100 hover:bg-primary hover:bg-opacity-25"
-                                x-bind:class="{
-                                    '!bg-primary !hover:bg-primary !hover:bg-opacity-25 text-white': record.id == form.id,
-                                    '!bg-zinc-100 hover:bg-primary hover:bg-opacity-25': record.id != form.id,
-                                }"
-                                >
-                                <div class="font-extrabold text-lg whitespace-pre-line" x-html="getUserById(record.user_id).name"></div>
-                                <div class="flex items-center gap-2">
-                                    <div 
-                                        class="text-sm px-3 py-1 rounded-md"
-                                        x-bind:class="{
-                                            '!bg-green-600 text-white': record.is_current,
-                                            '!bg-gray-500 text-white': record.is_future,
-                                            '!bg-red-600 text-white line-through': record.is_past,
-                                        }"
-                                        x-text="record.formatted_start_date">
-                                    </div>
-                                    <div 
-                                        class="text-sm px-3 py-1 rounded-md"
-                                        x-bind:class="{
-                                            '!bg-green-600 text-white': record.is_current,
-                                            '!bg-gray-500 text-white': record.is_future,
-                                            '!bg-red-600 text-white line-through': record.is_past,
-                                        }"
-                                        x-text="record.formatted_end_date">
-                                    </div>
+                <!-- Calendar Grid -->
+                <div class="border border-gray-200 rounded-lg overflow-x-auto">
+                    <div class="min-w-[350px]">
+                        <!-- Day Headers -->
+                        <div class="grid grid-cols-7 bg-gray-50 border-b border-gray-200">
+                            <template x-for="day in ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت']" :key="day">
+                                <div class="p-1 sm:p-2 text-center text-[12px] sm:text-sm font-semibold text-gray-700 border-r border-gray-200 last:border-r-0">
+                                    <span x-text="day"></span>
                                 </div>
-                            </div>
-                            <template x-if="record.can_delete">
-                                <x-svg.delete x-on:click="deleteRecord(record)" class="text-primary size-6" />
                             </template>
                         </div>
-                    </template>
-                    <div x-cloak x-intersect="loadMore" x-show="currentPage < totalPages" class="text-center p-8">
-                        <button type="button" class="text-primary font-bold">{{ __('Loading more...') }}</button>
+
+                        <!-- Calendar Days -->
+                        <div class="grid grid-cols-7">
+                            <template x-for="(day, index) in calendarDays" :key="index">
+                                <div class="min-h-[80px] sm:min-h-[120px] border-r border-b last:border-r-0 p-0.5 sm:p-1 transition-colors relative"
+                                    x-bind:class="getDayCellClass(day).backgroundColor">
+                                    <div class="flex items-center justify-between mb-0.5 sm:mb-1 relative z-20">
+                                        <span class="text-xs sm:text-sm font-medium px-0.5 sm:px-1"
+                                            x-bind:class="getDayCellClass(day).textColor" x-text="day.date"></span>
+                                    </div>
+                                    <div class="flex flex-col gap-0.5 sm:gap-1">
+                                        <template x-for="vacation in getVacationsForDay(day.fullDate)" :key="vacation.id">
+                                            <div x-on:click="vacation.can_update ? openModal(vacation) : null"
+                                                x-on:mouseenter="hoveredVacationId = vacation.id"
+                                                x-on:mouseleave="hoveredVacationId = null"
+                                                class="text-[10px] sm:text-xs p-0.5 sm:p-1 rounded cursor-pointer break-words whitespace-normal touch-manipulation active:opacity-75 leading-tight transition-colors duration-150"
+                                                x-bind:class="{
+                                                    'bg-green-600 text-white': vacation.is_current && hoveredVacationId !== vacation.id,
+                                                    'bg-green-700 text-white': vacation.is_current && hoveredVacationId === vacation.id,
+                                                    'bg-gray-500 text-white': (vacation.is_future || vacation.is_past) && hoveredVacationId !== vacation.id,
+                                                    'bg-gray-600 text-white': (vacation.is_future || vacation.is_past) && hoveredVacationId === vacation.id,
+                                                }"
+                                                x-text="getUserById(vacation.user_id)?.name || ''">
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -84,19 +106,159 @@
             totalResults: 0,
             loading: false,
             users: @json($users),
+            currentMonth: new Date().getMonth() + 1,
+            currentYear: new Date().getFullYear(),
+            calendarDays: [],
+            hoveredVacationId: null,
+            
             init() {
                 axios.defaults.headers.common["X-CSRF-TOKEN"] = document
                     .querySelector('meta[name="csrf-token"]')
                     .getAttribute("content");
+                this.buildCalendar();
                 this.fetchRecords();
-                this.$watch(() => JSON.stringify(this.filters), () => {
-                    this.resetPageNumber();
+            },
+
+            getDayCellClass(day) {
+                let backgroundColor = '';
+                let textColor = '';
+                if (day.isToday && day.isCurrentMonth) {
+                    backgroundColor = 'bg-primary bg-opacity-20 border-primary border';
+                    textColor = 'text-primary';
+                } else if (day.isWeekend && day.isCurrentMonth) {
+                    backgroundColor = 'bg-gray-200 border-gray-200';
+                    textColor = 'text-gray-400';
+                } else if (!day.isCurrentMonth) {
+                    backgroundColor = 'bg-gray-200 border-gray-200';
+                    textColor = 'text-gray-400';
+                } else {
+                    backgroundColor = 'bg-white border-gray-200';
+                    textColor = 'text-gray-900';
+                }
+                return {
+                    backgroundColor: backgroundColor,
+                    textColor: textColor,
+                };
+            },
+
+            buildCalendar() {
+                const firstDay = new Date(this.currentYear, this.currentMonth - 1, 1);
+                const lastDay = new Date(this.currentYear, this.currentMonth, 0);
+                const daysInMonth = lastDay.getDate();
+                const startingDayOfWeek = firstDay.getDay();
+                
+                const today = new Date();
+                const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+                
+                this.calendarDays = [];
+                
+                // Calculate previous month and year
+                let prevMonth = this.currentMonth - 1;
+                let prevYear = this.currentYear;
+                if (prevMonth === 0) {
+                    prevMonth = 12;
+                    prevYear--;
+                }
+                const prevMonthLastDay = new Date(prevYear, prevMonth, 0);
+                const daysInPrevMonth = prevMonthLastDay.getDate();
+                
+                // Add days from previous month
+                for (let i = startingDayOfWeek - 1; i >= 0; i--) {
+                    const date = daysInPrevMonth - i;
+                    const fullDate = `${prevYear}-${String(prevMonth).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+                    this.calendarDays.push({
+                        date: date,
+                        fullDate: fullDate,
+                        isCurrentMonth: false,
+                        isToday: fullDate === todayStr,
+                        isWeekend: new Date(fullDate).getDay() === 5 || new Date(fullDate).getDay() === 6,
+
+                    });
+                }
+                
+                // Add days from current month
+                for (let date = 1; date <= daysInMonth; date++) {
+                    const fullDate = `${this.currentYear}-${String(this.currentMonth).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+                    this.calendarDays.push({
+                        date: date,
+                        fullDate: fullDate,
+                        isCurrentMonth: true,
+                        isToday: fullDate === todayStr,
+                        isWeekend: new Date(fullDate).getDay() === 5 || new Date(fullDate).getDay() === 6,
+                    });
+                }
+                
+                // Calculate next month and year
+                let nextMonth = this.currentMonth + 1;
+                let nextYear = this.currentYear;
+                if (nextMonth === 13) {
+                    nextMonth = 1;
+                    nextYear++;
+                }
+                
+                // Add days from next month to fill the grid
+                const remainingDays = 42 - this.calendarDays.length; // 6 rows * 7 days
+                for (let date = 1; date <= remainingDays; date++) {
+                    const fullDate = `${nextYear}-${String(nextMonth).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+                    this.calendarDays.push({
+                        date: date,
+                        fullDate: fullDate,
+                        isCurrentMonth: false,
+                        isToday: fullDate === todayStr,
+                        isWeekend: new Date(fullDate).getDay() === 5 || new Date(fullDate).getDay() === 6,
+                    });
+                }
+            },
+
+            getMonthYear() {
+                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'];
+                return `${monthNames[this.currentMonth - 1]} ${this.currentYear}`;
+            },
+
+            previousMonth() {
+                if (this.currentMonth === 1) {
+                    this.currentMonth = 12;
+                    this.currentYear--;
+                } else {
+                    this.currentMonth--;
+                }
+                this.buildCalendar();
+                this.fetchRecords();
+            },
+
+            nextMonth() {
+                if (this.currentMonth === 12) {
+                    this.currentMonth = 1;
+                    this.currentYear++;
+                } else {
+                    this.currentMonth++;
+                }
+                this.buildCalendar();
+                this.fetchRecords();
+            },
+
+            goToToday() {
+                const today = new Date();
+                this.currentMonth = today.getMonth() + 1;
+                this.currentYear = today.getFullYear();
+                this.buildCalendar();
+                this.fetchRecords();
+            },
+
+            getVacationsForDay(dateStr) {
+                return this.records.filter(vacation => {
+                    const startDate = new Date(vacation.start_date + 'T00:00:00');
+                    const endDate = new Date(vacation.end_date + 'T23:59:59');
+                    const dayDate = new Date(dateStr + 'T00:00:00');
+                    
+                    return dayDate >= startDate && dayDate <= endDate;
                 });
             },
 
             resetFilters() {
                 Object.keys(this.filters).forEach(key => this.filters[key] = []);
-                this.fetchRecords(); // Reload records after resetting filters
+                this.fetchRecords();
             },
 
             fillForm(record) {
@@ -117,24 +279,20 @@
             },
 
             getUserById(id) {
-                return this.users.find(user => user.id === id);
+                return this.users.find(user => user.id === id) || {};
             },
 
-            fetchRecords(page = 1) {
+            fetchRecords() {
                 if (this.loading) return;
                 this.loading = true;
                 axios.get(`/${this.route}`, {
                         params: {
-                            page,
-                            filters: this.filters
+                            month: this.currentMonth,
+                            year: this.currentYear
                         }
                     })
                     .then((response) => {
-                        const data = response.data;
-                        this.records = page === 1 ? data.data : [...this.records, ...data.data];
-                        this.currentPage = data.meta.current_page;
-                        this.totalPages = data.meta.last_page;
-                        this.totalResults = data.meta.total;
+                        this.records = response.data;
                     })
                     .catch((error) => console.error(error.response?.data?.message || error.message))
                     .finally(() => this.loading = false);
@@ -159,39 +317,12 @@
                         data: this.form
                     })
                     .then((response) => {                        
-                        this.fetchRecords(); // Refresh records
-                        this.openModal(response.data.data)
+                        this.fetchRecords();
+                        this.closeModal();
                     })
                     .catch((error) => {
                         console.error(error.response?.data?.message || error.message);
                         alert('Failed to save record. Please check your input.');
-                    });
-            },
-
-            loadMore() {
-                if (this.currentPage >= this.totalPages || this.loading) return;
-                this.fetchRecords(this.currentPage + 1);
-            },
-
-            resetPageNumber() {
-                this.currentPage = 1;
-                this.fetchRecords();
-            },
-            toggleRecordIsActive(record, isActive) {
-                axios.put(`/${this.route}/${record.id}/toggle-active`, {
-                        is_active: isActive
-                    })
-                    .then((response) => {
-                        const data = response.data;
-                        // Update the record in the records list
-                        const index = this.records.findIndex(r => r.id === record.id);
-                        if (index !== -1) {
-                            this.records.splice(index, 1, data);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(error.response?.data?.message || error.message);
-                        alert('Failed to update active status.');
                     });
             },
 
@@ -200,9 +331,8 @@
 
                 axios.delete(`/${this.route}/${record.id}`)
                     .then(() => {
-                        // Remove the record from the list
                         this.records = this.records.filter(r => r.id !== record.id);
-                        this.totalResults -= 1; // Update total results
+                        this.fetchRecords();
                     })
                     .catch(error => {
                         console.error(error.response?.data?.message || error.message);

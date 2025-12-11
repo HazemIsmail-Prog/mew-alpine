@@ -25,17 +25,20 @@ class Vacation extends Model
 
     public function getIsCurrentAttribute()
     {
-        return $this->start_date <= now() && $this->end_date >= now();
+        $today = now()->startOfDay();
+        return $this->start_date->startOfDay() <= $today && $this->end_date->endOfDay() >= $today;
     }
 
     public function getIsFutureAttribute()
     {
-        return $this->start_date > now();
+        $today = now()->startOfDay();
+        return $this->start_date->startOfDay() > $today;
     }
 
     public function getIsPastAttribute()
     {
-        return $this->end_date < now();
+        $today = now()->endOfDay();
+        return $this->end_date->endOfDay() < $today;
     }
 
     public function getFormattedStartDateAttribute()

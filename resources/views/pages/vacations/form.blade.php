@@ -1,7 +1,12 @@
 <div x-show="showModal" x-cloak
     class="flex flex-col gap-3 bg-primary px-3 bg-opacity-5 h-full overflow-y-auto w-full lg:w-[416px] transition-all duration-150">
     <div class="p-2 border-b border-primary flex items-center justify-between text-primary font-extrabold">
-        <span x-text="form.id ? '{{ __('Edit') }} - '+ form.name : '{{ __('New Record') }}'"></span>
+        <span class="text-sm sm:text-base" x-text="form.id ? '{{ __('Edit') }} - '+ form.name : '{{ __('New Record') }}'"></span>
+        <button x-on:click="closeModal()" type="button" class="lg:hidden p-1 rounded hover:bg-gray-200 active:bg-gray-300 touch-manipulation">
+            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
     </div>
 
     <div class="overflow-y-auto flex-1 flex flex-col gap-3">
