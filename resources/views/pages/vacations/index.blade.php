@@ -72,9 +72,9 @@
                                                 class="text-[10px] sm:text-xs p-0.5 sm:p-1 rounded cursor-pointer break-words whitespace-normal touch-manipulation active:opacity-75 leading-tight transition-colors duration-150"
                                                 x-bind:class="{
                                                     'bg-green-600 text-white': vacation.is_current && hoveredVacationId !== vacation.id,
-                                                    'bg-green-700 text-white': vacation.is_current && hoveredVacationId === vacation.id,
+                                                    'bg-green-800 text-white': vacation.is_current && hoveredVacationId === vacation.id,
                                                     'bg-gray-500 text-white': (vacation.is_future || vacation.is_past) && hoveredVacationId !== vacation.id,
-                                                    'bg-gray-600 text-white': (vacation.is_future || vacation.is_past) && hoveredVacationId === vacation.id,
+                                                    'bg-gray-700 text-white': (vacation.is_future || vacation.is_past) && hoveredVacationId === vacation.id,
                                                 }"
                                                 x-text="getUserById(vacation.user_id)?.name || ''">
                                             </div>
