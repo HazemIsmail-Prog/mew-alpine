@@ -20,6 +20,12 @@ class VacationController extends Controller
                         ELSE 2
                     END as vacation_status_order
                 ', [now(), now(), now()])
+                ->when($request->filters['date'], function ($q) use ($request) {
+                    $q->where(function ($q) use ($request) {
+                        $q->whereDate('start_date', '<=', $request->filters['date'])
+                            ->whereDate('end_date', '>=', $request->filters['date']);
+                    });
+                })
                 ->orderBy('vacation_status_order')
                 ->orderBy('start_date')
                 ->orderByDesc('end_date')
