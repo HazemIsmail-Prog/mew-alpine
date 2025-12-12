@@ -52,5 +52,14 @@
     "Vacations":"الاجازات",
     "Start Date":"تاريخ البداية",
     "End Date":"تاريخ النهاية",
+    "No meetings scheduled for this month":"لا يوجد اجتماعات لهذا الشهر",
+    "Meetings Schedule":"مواعيد الاجتماعات",
+    "Meeting Date":"تاريخ الاجتماع",
+    "Start Time":"وقت البداية",
+    "End Time":"وقت النهاية",
+    "Meeting Location":"مكان الاجتماع",
+    "Attendees":"الحضور",
+    "Agenda":"اجندة الاجتماع",
+    "Meetings":"الاجتماعات",
     "":""
 }

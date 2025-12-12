@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
+use App\Models\Meeting;
 use App\Models\User;
-use App\Models\Vacation;
 use Illuminate\Auth\Access\Response;
 
-class VacationPolicy
+class MeetingPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class VacationPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Vacation $vacation): bool
+    public function view(User $user, Meeting $meeting): bool
     {
         return $user->role === 'superAdmin' || $user->role === 'admin' || $user->role === 'manager';
     }
@@ -29,38 +29,39 @@ class VacationPolicy
      */
     public function create(User $user): bool
     {
-            return $user->role === 'admin' || $user->role === 'superAdmin';
+        // return false;
+        return $user->role === 'superAdmin' || $user->role === 'admin';
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Vacation $vacation): bool
+    public function update(User $user, Meeting $meeting): bool
     {
-        return $user->role === 'admin' || $user->role === 'superAdmin';
+        return $user->role === 'superAdmin' || $user->role === 'admin';
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Vacation $vacation): bool
+    public function delete(User $user, Meeting $meeting): bool
     {
-        return $user->role === 'admin' || $user->role === 'superAdmin';
+        return $user->role === 'superAdmin' || $user->role === 'admin';
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Vacation $vacation): bool
+    public function restore(User $user, Meeting $meeting): bool
     {
-        return $user->role === 'admin' || $user->role === 'superAdmin';
+        return $user->role === 'superAdmin' || $user->role === 'admin';
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Vacation $vacation): bool
+    public function forceDelete(User $user, Meeting $meeting): bool
     {
-        return $user->role === 'admin' || $user->role === 'superAdmin';
+        return $user->role === 'superAdmin' || $user->role === 'admin';
     }
 }

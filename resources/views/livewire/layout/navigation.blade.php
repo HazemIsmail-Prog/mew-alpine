@@ -58,6 +58,11 @@ new class extends Component {
                             {{ __('Vacations') }}
                         </x-nav-link>
                     @endcan
+                    @can('viewAny', App\Models\Meeting::class)
+                        <x-nav-link :href="route('meetings.index')" :active="request()->routeIs('meetings.index')">
+                            {{ __('Meetings') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -146,6 +151,11 @@ new class extends Component {
             @can('viewAny', App\Models\Vacation::class)
                 <x-responsive-nav-link :href="route('vacations.index')" :active="request()->routeIs('vacations.index')">
                     {{ __('Vacations') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('viewAny', App\Models\Meeting::class)
+                <x-responsive-nav-link :href="route('meetings.index')" :active="request()->routeIs('meetings.index')">
+                    {{ __('Meetings') }}
                 </x-responsive-nav-link>
             @endcan
         </div>

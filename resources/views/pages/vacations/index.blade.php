@@ -1,14 +1,14 @@
 <x-app-layout>
+    <x-slot name="title">{{__('Vacations')}}</x-slot>
     <div x-data="vacationsComponent()" class="flex flex-col lg:flex-row h-full">
         <div class="flex-1 mx-auto overflow-auto w-full">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-2 sm:p-4 max-w-full">
                 <h1 class="text-2xl font-bold text-gray-900 text-center mb-5">{{__('Vacations')}}</h1>
 
-                <!-- Calendar Header -->
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3 sm:mb-4">
-                    <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
-                        <button 
-                            x-on:click="previousMonth()" 
+                <div class="flex items-center gap-2 justify-between w-full mb-3">
+                    <div class="flex items-center gap-2 sm:gap-3 w-fit">
+                        <button
+                            x-on:click="previousMonth()"
                             type="button"
                             class="p-2 sm:p-2 rounded-lg border border-gray-300 hover:bg-gray-100 active:bg-gray-200 touch-manipulation"
                         >
@@ -16,9 +16,9 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                         </button>
-                        <h2 class="text-base sm:text-xl font-bold text-gray-900 flex-1 text-center sm:text-left" x-text="getMonthYear()"></h2>
-                        <button 
-                            x-on:click="nextMonth()" 
+                        <h2 class="text-base font-bold text-gray-900 text-center w-[150px] flex-1" x-text="getMonthYear()"></h2>
+                        <button
+                            x-on:click="nextMonth()"
                             type="button"
                             class="p-2 sm:p-2 rounded-lg border border-gray-300 hover:bg-gray-100 active:bg-gray-200 touch-manipulation"
                         >
@@ -26,19 +26,17 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                             </svg>
                         </button>
-                        <button 
-                            x-on:click="goToToday()" 
-                            type="button"
-                            class="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg border border-gray-300 hover:bg-gray-100 active:bg-gray-200 text-xs sm:text-sm touch-manipulation"
-                        >
-                            {{ __('Today') }}
-                        </button>
                     </div>
-
-                    @if(auth()->user()->role == 'admin' || auth()->user()->role == 'superAdmin')
-                        <button x-on:click="openModal()" type="button"
-                            class="flex items-center justify-center gap-1 h-9 py-1 w-full sm:w-28 rounded-lg text-white font-bold !bg-danger px-4 touch-manipulation">
-                            {{ __('New') }}
+                    @if (auth()->user()->role === 'superAdmin' || auth()->user()->role === 'admin')
+                        <button
+                            x-on:click="openModal()"
+                            type="button"
+                            class="flex items-center justify-center gap-1 h-9 py-1 px-3 sm:px-4 rounded-lg text-white font-bold !bg-primary touch-manipulation"
+                        >
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            <span class="text-xs sm:text-sm">{{ __('New') }}</span>
                         </button>
                     @endif
                 </div>
@@ -211,8 +209,8 @@
             },
 
             getMonthYear() {
-                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                    'July', 'August', 'September', 'October', 'November', 'December'];
+                const monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+                    'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
                 return `${monthNames[this.currentMonth - 1]} ${this.currentYear}`;
             },
 

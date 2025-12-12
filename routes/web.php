@@ -9,6 +9,7 @@ use App\Http\Controllers\StepController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VacationController;
+use App\Http\Controllers\MeetingController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -27,6 +28,15 @@ Route::middleware('auth')->group(function () {
         Route::put('/vacations/{vacation}', 'update');
         Route::delete('/vacations/{vacation}', 'destroy');
     });
+
+    Route::controller(MeetingController::class)->group(function () {
+        Route::get('/meetings', 'index')->name('meetings.index');
+        Route::post('/meetings', 'store');
+        Route::put('/meetings/{meeting}', 'update');
+        Route::delete('/meetings/{meeting}', 'destroy');
+    });
+
+
 
     Route::apiResource('/contracts', ContractController::class)->except('show');
     Route::controller(ContractController::class)->group(function () {

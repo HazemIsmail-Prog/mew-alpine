@@ -30,6 +30,7 @@ class UserController extends Controller
         $roles = [
             ['id' => 'superAdmin', 'name' => __('Super Admin')],
             ['id' => 'admin', 'name' => __('Admin')],
+            ['id' => 'manager', 'name' => __('Manager')],
             ['id' => 'user', 'name' => __('User')],
         ];
 

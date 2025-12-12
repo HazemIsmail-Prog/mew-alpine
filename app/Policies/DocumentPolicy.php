@@ -20,17 +20,17 @@ class DocumentPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->role === 'admin' || $user->role === 'user';
+        return $user->role === 'admin' || $user->role === 'user' || $user->role === 'manager';
     }
     
     public function viewSteps(User $user): bool
     {
-        return $user->role === 'admin' || $user->role === 'user';
+        return $user->role === 'admin' || $user->role === 'user' || $user->role === 'manager';
     }
     
     public function viewAttachments(User $user): bool
     {
-        return $user->role === 'admin' || $user->role === 'user';
+        return $user->role === 'admin' || $user->role === 'user' || $user->role === 'manager';
     }
     
     public function create(User $user): bool
