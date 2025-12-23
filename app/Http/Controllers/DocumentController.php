@@ -137,8 +137,8 @@ class DocumentController extends Controller
                     }
                 });
             })
-            // ->orderBy('is_completed') // Sorts documents with uncompleted steps first
-            ->latest()
+            ->orderByRaw('(SELECT MAX(steps.id) FROM steps WHERE steps.document_id = documents.id) DESC')
+            // ->latest()
             ->paginate(30);
 
         return DocumentResource::collection($documents);
