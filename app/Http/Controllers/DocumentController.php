@@ -137,8 +137,7 @@ class DocumentController extends Controller
                     }
                 });
             })
-            ->orderByRaw('(SELECT MAX(steps.id) FROM steps WHERE steps.document_id = documents.id) DESC')
-            // ->latest()
+            ->orderByRaw('COALESCE((SELECT MAX(steps.updated_at) FROM steps WHERE steps.document_id = documents.id),documents.created_at) DESC')
             ->paginate(30);
 
         return DocumentResource::collection($documents);
