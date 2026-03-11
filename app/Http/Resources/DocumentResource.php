@@ -24,6 +24,9 @@ class DocumentResource extends JsonResource
             'from_id' => $this->from_id,
             'to_id' => $this->to_id,
             'type' => $this->type,
+            'alert_after' => $this->alert_after,
+            // alertable is days defference between start of day and created_at and today
+            'alertable' => $this->created_at->startOfDay()->diffInDays(now()->startOfDay()) >= $this->alert_after && $this->alert_after > 0 && $this->uncompletedSteps()->count() > 0,
             'title' => $this->title,
             'is_completed' => $this->is_completed,
             'ref' => $this->ref,

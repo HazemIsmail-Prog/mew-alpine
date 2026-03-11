@@ -15,6 +15,12 @@
             model="form.to_id" selected-items="form.to_id" />
         </div>
 
+        <div>
+            <x-input-label for="alert_after" :value="__('Alert After')" />
+            <input type="number" id="alert_after" class="w-full rounded-md focus:outline-none focus:ring-0 border-none outline-none"
+                x-model="form.alert_after" />
+        </div>
+
         <x-dropdown-test id="form.follow_ids" label="{{ __('Follwers') }}" :list="$users" :multiple="true"
         model="form.follow_ids" selected-items="form.follow_ids" />
 

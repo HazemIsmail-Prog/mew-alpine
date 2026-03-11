@@ -15,10 +15,12 @@
     <div x-on:click="openModal(record)"
         x-bind:class="[
             'break-inside-avoid print:!bg-white flex-1 flex flex-col md:flex-row items-center justify-between gap-2 cursor-pointer border rounded-lg p-2',
+            record.alertable ? '!bg-red-200 !text-red-800 border-red-300 animate-pulse' : '',
             form.id == record.id 
                 ? 'bg-primary !hover:opacity-100 text-white print:text-black' 
                 : 'bg-zinc-100 hover:bg-primary hover:bg-opacity-25'
         ]">
+        <p x-text="record.alertable"></p>
         <div class=" w-full">
             <div class=" font-extrabold text-lg whitespace-pre-line" x-html="record.title"></div>
             <!-- <div class="text-sm" x-text="getName('contract', record.contract_id)"></div> -->
@@ -26,13 +28,39 @@
                 <div class="text-sm" x-text="getName('contract', contract_id)"></div>
             </template>
             <div class=" flex items-center gap-1">
-                <x-svg.inbox x-show="record.type == 'incoming'" class=" size-4 shrink-0" x-bind:class="form.id == record.id ? 'text-white print:text-success' : 'text-success'" />
-                <x-svg.outbox x-show="record.type == 'outgoing'" class=" size-4 shrink-0" x-bind:class="form.id == record.id ? 'text-white print:text-danger' : 'text-danger'" />
+                <x-svg.inbox
+                    x-show="record.type == 'incoming'"
+                    class="size-4 shrink-0"
+                    x-bind:class="[
+                        form.id == record.id ? 'text-white print:text-success' : 'text-success',
+                        record.alertable ? '!bg-red-100 !text-red-800 border-red-300 rounded' : ''
+                    ]"
+                />
+                <x-svg.outbox
+                    x-show="record.type == 'outgoing'"
+                    class="size-4 shrink-0"
+                    x-bind:class="[
+                        form.id == record.id ? 'text-white print:text-danger' : 'text-danger',
+                        record.alertable ? '!bg-red-100 !text-red-800 border-red-300 rounded' : ''
+                    ]"
+                />
                 <div class=" flex flex-col print:text-primary">
-                    <div x-show="record.type == 'incoming'" class="text-sm" x-bind:class="form.id == record.id ? 'text-white print:text-primary' : 'text-primary'"
+                    <div 
+                        x-show="record.type == 'incoming'" 
+                        class="text-sm"
+                        x-bind:class="[
+                            form.id == record.id ? 'text-white print:text-primary' : 'text-primary',
+                            record.alertable ? '!bg-red-100 !text-red-800 border-red-300 px-2 py-0.5 rounded' : ''
+                        ]"
                         x-text="getName('stakeholder',record.from_id)">
                     </div>
-                    <div x-show="record.type == 'outgoing'" class="text-sm" x-bind:class="form.id == record.id ? 'text-white print:text-primary' : 'text-primary'"
+                    <div 
+                        x-show="record.type == 'outgoing'" 
+                        class="text-sm"
+                        x-bind:class="[
+                            form.id == record.id ? 'text-white print:text-primary' : 'text-primary',
+                            record.alertable ? '!bg-red-100 !text-red-800 border-red-300 px-2 py-0.5 rounded' : ''
+                        ]"
                         x-text="getName('stakeholder',record.to_id)">
                     </div>
                 </div>

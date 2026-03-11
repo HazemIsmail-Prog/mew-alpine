@@ -49,6 +49,7 @@
                     from_id: record?.from_id ?? null,
                     to_id: record?.to_id ?? null,
                     type: record?.type ?? type,
+                    alert_after: record?.alert_after ?? 0,
                     title: record?.title ?? '',
                     is_completed: record?.is_completed ?? false,
                     ref: record?.ref ?? '',
