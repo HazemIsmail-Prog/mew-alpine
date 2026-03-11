@@ -21,6 +21,20 @@
             <p class=" whitespace-pre-line" x-html="form.title"></p>
         </div>
 
+        <!-- followers -->
+        <template x-if="form.follow_ids.length">
+            <div class="mb-3">
+                <x-input-label for="follow_ids" :value="__('Follwers')" />
+                <div class=" mt-1 w-full flex flex-wrap gap-1 items-center">
+                    <template x-for="id in form.follow_ids" :key="id">
+                        <span
+                            class="whitespace-pre-line cursor-pointer bg-primary text-white text-xs font-medium px-2.5 py-0.5 rounded"
+                            x-html="getName('user',id)"></span>
+                    </template>
+                </div>
+            </div>
+        </template>
+
         <div class="mb-3" x-show="form.content">
             <x-input-label for="content" :value="__('Contents')" />
             <p class=" whitespace-pre-line" x-html="form.content"></p>
