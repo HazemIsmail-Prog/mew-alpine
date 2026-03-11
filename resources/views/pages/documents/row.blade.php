@@ -20,7 +20,6 @@
                 ? 'bg-primary !hover:opacity-100 text-white print:text-black' 
                 : 'bg-zinc-100 hover:bg-primary hover:bg-opacity-25'
         ]">
-        <p x-text="record.alertable"></p>
         <div class=" w-full">
             <div class=" font-extrabold text-lg whitespace-pre-line" x-html="record.title"></div>
             <!-- <div class="text-sm" x-text="getName('contract', record.contract_id)"></div> -->
