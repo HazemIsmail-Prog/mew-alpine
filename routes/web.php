@@ -10,6 +10,9 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VacationController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\InfoController;
+use App\Http\Controllers\ActionController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -21,6 +24,25 @@ Route::middleware('auth')->group(function () {
 
     Route::view('profile', 'profile')
         ->name('profile');
+
+
+    Route::controller(InfoController::class)->group(function () {
+        Route::get('/infos/{contract}', 'index')->name('infos.index');
+        Route::post('/infos/{contract}', 'store');
+        Route::put('/infos/{info}', 'update');
+        Route::delete('/infos/{info}', 'destroy');
+    });
+
+    Route::controller(ActionController::class)->group(function () {
+        Route::get('/actions/{contract}', 'index')->name('actions.index');
+        Route::post('/actions/{contract}', 'store');
+        Route::put('/actions/{action}', 'update');
+        Route::delete('/actions/{action}', 'destroy');
+    });
+
+    Route::controller(ReportController::class)->group(function () {
+        Route::get('/reports', 'index')->name('reports.index');
+    });
 
     Route::controller(VacationController::class)->group(function () {
         Route::get('/vacations', 'index')->name('vacations.index');

@@ -17,4 +17,12 @@ class Contract extends Model
     public function users() : BelongsToMany {
         return $this->belongsToMany(User::class);
     }
+
+    public function infos() : HasMany {
+        return $this->hasMany(Info::class);
+    }
+
+    public function actions() : HasMany {
+        return $this->hasMany(Action::class);
+    }
 }

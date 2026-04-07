@@ -62,5 +62,15 @@
     "Agenda":"اجندة الاجتماع",
     "Meetings":"الاجتماعات",
     "Alert After":"تنبيه بعد (ايام)",
+    "Reports":"التقارير",
+    "Information":"المعلومات",
+    "Actions":"الاجراءات",
+    "Date":"التاريخ",
+    "Authority":"الجهة",
+    "Description":"الوصف",
+    "Creator":"المنشئ",
+    "Add":"اضافة",
+    "Delete":"حذف",
+    "Confirm":"تأكيد",
     "":""
 }
