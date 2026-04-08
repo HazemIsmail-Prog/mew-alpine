@@ -22,7 +22,7 @@
         </div>
 
         <!-- followers -->
-        <template x-if="form.follow_ids.length">
+        <template x-if="form.follow_ids?.length">
             <div class="mb-3">
                 <x-input-label for="follow_ids" :value="__('Follwers')" />
                 <div class=" mt-1 w-full flex flex-wrap gap-1 items-center">

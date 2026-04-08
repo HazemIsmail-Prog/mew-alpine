@@ -274,7 +274,6 @@
             },
 
             buildCalendar() {
-                console.log('buildCalendar');
                 const firstDay = new Date(this.currentYear, this.currentMonth - 1, 1);
                 const lastDay = new Date(this.currentYear, this.currentMonth, 0);
                 const daysInMonth = lastDay.getDate();
@@ -343,7 +342,6 @@
             },
 
             buildTimeline() {
-                console.log('buildTimeline');
                 const daysInMonth = new Date(this.currentYear, this.currentMonth, 0).getDate();
                 const monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
                     'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
