@@ -141,6 +141,28 @@
 
             },
 
+            replyToRecord(record, type) {
+                this.showModal = true;
+                const stakeholder = record.type === 'outgoing' ? record?.to_id : record?.from_id;
+                this.form = {
+                    id: null,
+                    contract_ids: record?.contract_ids ?? [],
+                    from_id: type === 'incoming' ? stakeholder : null,
+                    to_id: type === 'outgoing' ? stakeholder : null,
+                    type: type,
+                    alert_after: record?.alert_after ?? 0,
+                    title: record?.title ?? '',
+                    is_completed: record?.is_completed ?? false,
+                    // ref: record?.ref ?? '',
+                    // content: record?.content ?? '',
+                    notes: record?.notes ?? '',
+                    // follow_ids: record?.follow_ids ?? [],
+                    tag_ids: record?.tag_ids ?? [],
+                    can_update: record?.can_update ?? true,
+                    can_delete: record?.can_delete ?? true,
+                };
+            },
+
             closeModal() {
                 this.openModal(null); // this line to clear selected record before hiding the modal
                 this.showModal = false;

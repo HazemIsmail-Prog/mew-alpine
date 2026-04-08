@@ -83,6 +83,10 @@
         </template>
     </div>
 
+    @can('create', App\Models\Document::class)
+        <x-svg.outbox x-on:click="replyToRecord(record,'outgoing')" class="text-danger size-6 print:hidden" />
+        <x-svg.inbox x-on:click="replyToRecord(record,'incoming')" class="text-success size-6 print:hidden" />
+    @endcan
     <template x-if="record.can_delete">
         <x-svg.delete x-on:click="deleteRecord(record)" class="text-primary size-6 print:hidden" />
     </template>
