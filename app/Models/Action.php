@@ -11,6 +11,7 @@ class Action extends Model
     protected $guarded = [];
     protected $appends = [
         'can_delete',
+        'can_edit',
     ];
 
     public function contract() : BelongsTo {
@@ -22,6 +23,10 @@ class Action extends Model
     }
 
     public function getCanDeleteAttribute() : bool {
+        return Auth::user()->role === 'superAdmin' || Auth::user()->role === 'admin' || $this->created_by === Auth::id();
+    }
+
+    public function getCanEditAttribute() : bool {
         return Auth::user()->role === 'superAdmin' || Auth::user()->role === 'admin' || $this->created_by === Auth::id();
     }
 }
