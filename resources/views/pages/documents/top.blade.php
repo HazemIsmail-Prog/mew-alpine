@@ -49,6 +49,9 @@
     <x-dropdown-test id="filters.statuses" label="{{ __('Status') }}" :list="$statusesList" :multiple="true"
         model="filters.statuses" selected-items="filters.statuses" />
 
+    <x-dropdown-test id="filters.orderBy" label="{{ __('Order By') }}" :list="$orderByList" :multiple="false"
+        model="filters.orderBy" selected-items="filters.orderBy" />
+
     <button x-cloak x-bind:disabled="!hasFilters" x-on:click="resetFilters()"
         class="text-primary disabled:text-gray-400 disabled:border-gray-400 disabled:cursor-not-allowed self-end border h-[42px] whitespace-nowrap border-primary p-2 rounded-md">
         {{ __('Reset') }}

@@ -32,6 +32,7 @@
             contracts: @json($contracts),
             stakeholders: @json($stakeholders),
             users: @json($users),
+            orderByList: @json($orderByList),
             filters: {
                 search: '',
                 contract_ids: [],
@@ -40,6 +41,7 @@
                 statuses: [],
                 tag_ids: [],
                 types: [],
+                orderBy: 'created_at',
             },
 
             fillForm(record, type) {

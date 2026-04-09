@@ -58,6 +58,11 @@ class DocumentController extends Controller
             ['id' => 'pending', 'name' => __('Pending')],
         ];
 
+        $orderByList = [
+            ['id' => 'created_at', 'name' => __('Created Date')],
+            ['id' => 'updated_at', 'name' => __('Updated Date')],
+        ];
+
         return view('pages.documents.index', [
             'contracts' => $contracts,
             'stakeholders' => $stakeholders,
@@ -65,6 +70,7 @@ class DocumentController extends Controller
             'tags' => $tags,
             'typesList' => $typesList,
             'statusesList' => $statusesList,
+            'orderByList' => $orderByList,
         ]);
     }
 
@@ -137,7 +143,13 @@ class DocumentController extends Controller
                     }
                 });
             })
-            ->orderByRaw('COALESCE((SELECT MAX(steps.updated_at) FROM steps WHERE steps.document_id = documents.id),documents.created_at) DESC')
+            ->when(isset($filters['orderBy']), function (Builder $q) use ($filters) {
+                if($filters['orderBy'] === 'updated_at'){
+                    $q->orderByRaw('COALESCE((SELECT MAX(steps.updated_at) FROM steps WHERE steps.document_id = documents.id),documents.created_at) DESC');
+                }else{
+                    $q->orderBy('created_at', 'desc');
+                }
+            })
             ->paginate(30);
 
         return DocumentResource::collection($documents);
