@@ -17,8 +17,8 @@ class InfoController extends Controller
     public function store(Request $request, Contract $contract)
     {
         $request->validate([
-            'key' => 'required|string|max:255',
-            'value' => 'required|string|max:255',
+            'key' => 'required|string',
+            'value' => 'required|string',
         ]);
         $index = $contract->infos()->max('index') + 1;
         $info = $contract->infos()->create([
@@ -32,8 +32,8 @@ class InfoController extends Controller
     public function update(Request $request, Info $info)
     {
         $request->validate([
-            'key' => 'required|string|max:255',
-            'value' => 'required|string|max:255',
+            'key' => 'required|string',
+            'value' => 'required|string',
         ]);
         $info->update([
             'key' => $request->key,

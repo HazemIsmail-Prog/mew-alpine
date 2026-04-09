@@ -19,8 +19,8 @@ class ActionController extends Controller
     {
         $request->validate([
             'date' => 'required|date',
-            'authority' => 'nullable|string|max:255',
-            'description' => 'nullable|string|max:255',
+            'authority' => 'nullable|string',
+            'description' => 'nullable|string',
             'notes' => 'nullable|string',
         ]);
         $is_milestone = $request->has('is_milestone') ? true : false;
@@ -39,8 +39,8 @@ class ActionController extends Controller
     {
         $request->validate([
             'date' => 'required|date',
-            'authority' => 'nullable|string|max:255',
-            'description' => 'nullable|string|max:255',
+            'authority' => 'nullable|string',
+            'description' => 'nullable|string',
             'notes' => 'nullable|string',
         ]);
         $is_milestone = $request->has('is_milestone') ? true : false;
