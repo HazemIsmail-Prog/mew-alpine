@@ -89,6 +89,7 @@
 
             resetFilters() {
                 Object.keys(this.filters).forEach(key => this.filters[key] = []);
+                this.filters.orderBy = 'created_at';
             },
 
             fetchRecord(id) {
@@ -158,7 +159,7 @@
                     // ref: record?.ref ?? '',
                     // content: record?.content ?? '',
                     notes: record?.notes ?? '',
-                    // follow_ids: record?.follow_ids ?? [],
+                    follow_ids: [],
                     tag_ids: record?.tag_ids ?? [],
                     can_update: record?.can_update ?? true,
                     can_delete: record?.can_delete ?? true,
